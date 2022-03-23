@@ -113,7 +113,7 @@ public class UtenteController {
 			model.addAttribute("ruoli_totali_attr", RuoloDTO.createRuoloDTOListFromModelList(ruoloService.listAll()));
 			return "utente/edit";
 		}
-		utenteService.aggiorna(utenteDTO.buildUtenteModel(true));
+		utenteService.aggiornaUtenteEDipendente(utenteDTO.buildUtenteModel(true));
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/utente";

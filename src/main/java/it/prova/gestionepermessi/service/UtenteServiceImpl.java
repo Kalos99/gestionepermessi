@@ -62,11 +62,11 @@ public class UtenteServiceImpl implements UtenteService {
 			throw new RuntimeException("Elemento non trovato");
 		utenteReloaded.setNome(utenteInstance.getNome());
 		utenteReloaded.setCognome(utenteInstance.getCognome());
-		utenteReloaded.setUsername(utenteInstance.getUsername());
+		utenteReloaded.setUsername(Character.toLowerCase(utenteInstance.getNome().charAt(0)) + "." + utenteInstance.getCognome().toLowerCase());
 		utenteReloaded.setRuoli(utenteInstance.getRuoli());
-		utenteRepository.save(utenteReloaded);		
+		utenteRepository.save(utenteReloaded);
 	}
-
+	
 	@Transactional
 	public void inserisciNuovo(Utente utenteInstance) {
 		utenteInstance.setStato(StatoUtente.CREATO);
@@ -160,5 +160,25 @@ public class UtenteServiceImpl implements UtenteService {
 		
 		dipendenteRepository.save(dipendenteInstance);
 		
+	}
+	
+	@Transactional
+	public void aggiornaUtenteEDipendente(Utente utenteInstance) {
+		// deve aggiornare solo nome, cognome, username, ruoli
+		Utente utenteReloaded = utenteRepository.findById(utenteInstance.getId()).orElse(null);
+		if (utenteReloaded == null)
+			throw new RuntimeException("Elemento non trovato");
+		utenteReloaded.setNome(utenteInstance.getNome());
+		utenteReloaded.setCognome(utenteInstance.getCognome());
+		utenteReloaded.setUsername(Character.toLowerCase(utenteInstance.getNome().charAt(0)) + "." + utenteInstance.getCognome().toLowerCase());
+		utenteReloaded.setRuoli(utenteInstance.getRuoli());
+		utenteRepository.save(utenteReloaded);
+
+		Dipendente dipendenteAssociatoAdUtente = utenteReloaded.getDipendente();
+
+		dipendenteAssociatoAdUtente.setNome(utenteInstance.getNome());
+		dipendenteAssociatoAdUtente.setCognome(utenteInstance.getCognome());
+//		dipendenteAssociatoAdUtente.setEmail(dipendenteAssociatoAdUtente.buildEmail());
+		dipendenteRepository.save(dipendenteAssociatoAdUtente);
 	}
 }

@@ -31,4 +31,6 @@ public interface UtenteService {
 	public Utente findByUsername(String username);
 	
 	public void inserisciNuovoECensisciDipendente(Utente utenteInstance);
+	
+	public void aggiornaUtenteEDipendente(Utente utenteInstance);
 }
