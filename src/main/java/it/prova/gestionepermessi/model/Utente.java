@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -45,10 +46,40 @@ public class Utente {
 	@JoinTable(name = "utente_ruolo", joinColumns = @JoinColumn(name = "utente_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ruolo_id", referencedColumnName = "ID"))
 	private Set<Ruolo> ruoli = new HashSet<>(0);
 	
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "utente")
+//	@JoinColumn(name = "dipendente_id", referencedColumnName = "id", nullable = false, unique = true)
+	private Dipendente dipendente;
+	
 	public Utente() {
 	}
-	
-	
+
+	public Utente(Long id, String username, String password, String nome, String cognome, Date dateCreated,
+			StatoUtente stato, Set<Ruolo> ruoli, Dipendente dipendente) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.dateCreated = dateCreated;
+		this.stato = stato;
+		this.ruoli = ruoli;
+		this.dipendente = dipendente;
+	}
+
+	public Utente(Long id, String nome, String cognome, StatoUtente stato, Set<Ruolo> ruoli) {
+		this.id = id;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.stato = stato;
+		this.ruoli = ruoli;
+	}
+
+	public Utente(String nome, String cognome, StatoUtente stato, Set<Ruolo> ruoli) {
+		this.nome = nome;
+		this.cognome = cognome;
+		this.stato = stato;
+		this.ruoli = ruoli;
+	}
 
 	public Utente(Long id, String username, String password, String nome, String cognome, Date dateCreated, StatoUtente stato, Set<Ruolo> ruoli) {
 		this.id = id;
@@ -95,6 +126,12 @@ public class Utente {
 	public Utente(String username, String password, String nome, String cognome, Date dateCreated) {
 		this.username = username;
 		this.password = password;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.dateCreated = dateCreated;
+	}
+
+	public Utente(String nome, String cognome, Date dateCreated) {
 		this.nome = nome;
 		this.cognome = cognome;
 		this.dateCreated = dateCreated;
@@ -162,6 +199,14 @@ public class Utente {
 
 	public void setRuoli(Set<Ruolo> ruoli) {
 		this.ruoli = ruoli;
+	}
+
+	public Dipendente getDipendente() {
+		return dipendente;
+	}
+
+	public void setDipendente(Dipendente dipendente) {
+		this.dipendente = dipendente;
 	}
 
 	public boolean isAdmin() {

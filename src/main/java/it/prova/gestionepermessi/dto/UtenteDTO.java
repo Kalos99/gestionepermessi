@@ -17,11 +17,9 @@ import it.prova.gestionepermessi.validation.ValidationWithPassword;
 public class UtenteDTO {
 	private Long id;
 
-	@NotBlank(message = "{username.notblank}", groups = { ValidationWithPassword.class, ValidationNoPassword.class })
-	@Size(min = 3, max = 15, message = "Il valore inserito '${validatedValue}' deve essere lungo tra {min} e {max} caratteri")
 	private String username;
 
-	@NotBlank(message = "{password.notblank}", groups = ValidationWithPassword.class)
+	@NotBlank(message = "{password.notblank}")
 	@Size(min = 8, max = 15, message = "Il valore inserito deve essere lungo tra {min} e {max} caratteri")
 	private String password;
 
@@ -50,8 +48,12 @@ public class UtenteDTO {
 		this.cognome = cognome;
 		this.stato = stato;
 	}
-	
-	
+
+	public UtenteDTO(String nome, String cognome, Long[] ruoliIds) {
+		this.nome = nome;
+		this.cognome = cognome;
+		this.ruoliIds = ruoliIds;
+	}
 
 	public UtenteDTO(Long id, String username, String nome, String cognome, Date dateCreated, StatoUtente stato) {
 		this.id = id;
@@ -167,5 +169,10 @@ public class UtenteDTO {
 
 	public boolean isDisabilitato() {
 		return this.stato != null && this.stato.equals(StatoUtente.DISABILITATO);
+	}
+
+	@Override
+	public String toString() {
+		return "UtenteDTO [nome=" + nome + ", cognome=" + cognome + ", ruoliIds=" + Arrays.toString(ruoliIds) + "]";
 	}
 }

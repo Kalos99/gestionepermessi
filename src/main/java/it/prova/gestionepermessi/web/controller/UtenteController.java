@@ -43,7 +43,7 @@ public class UtenteController {
 	public ModelAndView listAllUtenti() {
 		ModelAndView mv = new ModelAndView();
 		List<Utente> utenti = utenteService.listAllUtenti();
-		mv.addObject("utente_list_attribute", utenti);
+		mv.addObject("utente_list_attribute", UtenteConRuoliDTO.createUtenteConRuoliDTOListFromModelList(utenti));
 		mv.setViewName("utente/list");
 		return mv;
 	}
@@ -62,7 +62,7 @@ public class UtenteController {
 		List<Utente> utenti = utenteService.findByExample(utenteExample.buildUtenteModel(true), pageNo,
 				pageSize, sortBy).getContent();
 
-		model.addAttribute("utente_list_attribute", UtenteDTO.createUtenteDTOListFromModelList(utenti));
+		model.addAttribute("utente_list_attribute", UtenteConRuoliDTO.createUtenteConRuoliDTOListFromModelList(utenti));
 		return "utente/list";
 	}
 
@@ -81,14 +81,11 @@ public class UtenteController {
 					ValidationNoPassword.class }) @ModelAttribute("insert_utente_attr") UtenteDTO utenteDTO,
 			BindingResult result, Model model, RedirectAttributes redirectAttrs) {
 
-		if (!result.hasFieldErrors("password") && !utenteDTO.getPassword().equals(utenteDTO.getConfermaPassword()))
-			result.rejectValue("confermaPassword", "password.diverse");
-
 		if (result.hasErrors()) {
 			model.addAttribute("ruoli_totali_attr", RuoloDTO.createRuoloDTOListFromModelList(ruoloService.listAll()));
 			return "utente/insert";
 		}
-		utenteService.inserisciNuovo(utenteDTO.buildUtenteModel(true));
+		utenteService.inserisciNuovoECensisciDipendente(utenteDTO.buildUtenteModel(true));
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/utente";

@@ -45,13 +45,18 @@ public class Dipendente {
 	private Sesso sesso;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "utente_id", referencedColumnName = "id", nullable = false, unique = true)
+//	@JoinColumn(name = "utente_id", referencedColumnName = "id", nullable = false, unique = true)
 	private Utente utente;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dipendente")
 	private Set<RichiestaPermesso> richieste = new HashSet<RichiestaPermesso>(0);
 
 	public Dipendente() {
+	}
+
+	public Dipendente(String nome, String cognome) {
+		this.nome = nome;
+		this.cognome = cognome;
 	}
 
 	public Dipendente(Long id, String nome, String cognome, String codFis, String email, Date dataNascita,

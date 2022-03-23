@@ -12,24 +12,31 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}/home">Home</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="dropdown07" data-bs-toggle="dropdown" aria-expanded="false">Menù</a>
-            <ul class="dropdown-menu" aria-labelledby="dropdown07">
-              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/home">Home</a></li>
-              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/regista/search">Ricerca Registi</a></li>
-              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/regista/insert">Inserisci Regista</a></li>
-              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/film/search">Ricerca Film</a></li>
-              <li><a class="dropdown-item" href="${pageContext.request.contextPath}/film/insert">Inserisci Film</a></li>
-            </ul> 
-          </li>
            <sec:authorize access="hasRole('ADMIN')">
 		      <li class="nav-item dropdown">
-		        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Gestione Utenze</a>
+		        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menù</a>
 		        <div class="dropdown-menu" aria-labelledby="dropdown01">
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/utente/search">Ricerca Utenti</a>
-		          <a class="dropdown-item" href="${pageContext.request.contextPath}/utente/insert">Inserisci Utente</a>
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/utente/search">Gestione Utenze</a>
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/dipendente/search">Ricerca dipendenti</a>
 		        </div>
 		      </li>
+		   </sec:authorize>
+		   
+		   <sec:authorize access="hasRole('BO_USER')">
+		      <li class="nav-item dropdown">
+		        <a class="nav-link dropdown-toggle" href="#" id="dropdown01" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Menù</a>
+		        <div class="dropdown-menu" aria-labelledby="dropdown01">
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/dipendente/search">Gestione Dipendenti</a>
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/richiesta_permesso/search">Gestione richieste permesso</a>
+		          <a class="dropdown-item" href="${pageContext.request.contextPath}/messaggio/search">Gestione messaggi</a>
+		        </div>
+		      </li>
+		   </sec:authorize>
+		   
+		   <sec:authorize access="hasRole('DIPENDENTE_USER')">
+	          <li class="nav-item">
+	            <a class="nav-link" href="${pageContext.request.contextPath}/richiesta_permesso/search">Gestione Richieste Permesso</a>
+	          </li>
 		   </sec:authorize>
         </ul>
       </div>
@@ -41,7 +48,7 @@
         	</button>
        		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
           		<li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Logout</a></li>
-            	<li><a class="dropdown-item" href="${pageContext.request.contextPath}/utente/change/${principal.username }">Reset Password</a></li>
+<%--              	<li><a class="dropdown-item" href="${pageContext.request.contextPath}/utente/change/${principal.username }">Reset Password</a></li> --%>
        		</ul>
     		</div>
       	</sec:authorize>
