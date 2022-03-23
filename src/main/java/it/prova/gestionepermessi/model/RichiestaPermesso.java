@@ -34,6 +34,7 @@ public class RichiestaPermesso {
 	@Column(name = "codice")
 	private String codiceCertificato;
 	@Column(name = "note")
+	private String note;
 	
 	@OneToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "attachment_id", referencedColumnName = "id", nullable = true)
@@ -46,27 +47,41 @@ public class RichiestaPermesso {
 	public RichiestaPermesso() {
 	}
 
-	public RichiestaPermesso(Long id, TipoPermesso tipoPermesso, Date dataInizio, Date dataFine, Boolean approvato,
-			String codiceCertificato, Attachment attachment, Dipendente dipendente) {
-		this.id = id;
+	
+
+	public RichiestaPermesso(TipoPermesso tipoPermesso, Date dataInizio, Date dataFine, Boolean approvato,
+			String codiceCertificato, String note, Attachment attachment, Dipendente dipendente) {
 		this.tipoPermesso = tipoPermesso;
 		this.dataInizio = dataInizio;
 		this.dataFine = dataFine;
 		this.approvato = approvato;
 		this.codiceCertificato = codiceCertificato;
+		this.note = note;
 		this.attachment = attachment;
 		this.dipendente = dipendente;
 	}
 
 	public RichiestaPermesso(Long id, TipoPermesso tipoPermesso, Date dataInizio, Date dataFine, Boolean approvato,
-			String codiceCertificato, Attachment attachment) {
+			String codiceCertificato, String note, Attachment attachment, Dipendente dipendente) {
 		this.id = id;
 		this.tipoPermesso = tipoPermesso;
 		this.dataInizio = dataInizio;
 		this.dataFine = dataFine;
 		this.approvato = approvato;
 		this.codiceCertificato = codiceCertificato;
+		this.note = note;
 		this.attachment = attachment;
+		this.dipendente = dipendente;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+
+
+	public void setNote(String note) {
+		this.note = note;
 	}
 
 	public Long getId() {
