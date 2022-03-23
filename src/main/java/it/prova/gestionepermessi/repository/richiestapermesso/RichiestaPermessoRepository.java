@@ -3,6 +3,8 @@ package it.prova.gestionepermessi.repository.richiestapermesso;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface RichiestaPermessoRepository extends PagingAndSortingRepository<RichiestaPermessoRepository, Long>, JpaSpecificationExecutor<RichiestaPermessoRepository>{
+import it.prova.gestionepermessi.model.RichiestaPermesso;
+
+public interface RichiestaPermessoRepository extends PagingAndSortingRepository<RichiestaPermesso, Long>, JpaSpecificationExecutor<RichiestaPermesso>{
 
 }

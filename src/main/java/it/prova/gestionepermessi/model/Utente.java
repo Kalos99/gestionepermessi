@@ -45,15 +45,12 @@ public class Utente {
 	@JoinTable(name = "utente_ruolo", joinColumns = @JoinColumn(name = "utente_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ruolo_id", referencedColumnName = "ID"))
 	private Set<Ruolo> ruoli = new HashSet<>(0);
 	
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "utenteInserimento")
-	private Set<Messaggio> messaggi = new HashSet<Messaggio>(0);
-	
 	public Utente() {
 	}
 	
 	
 
-	public Utente(Long id, String username, String password, String nome, String cognome, Date dateCreated, StatoUtente stato, Set<Ruolo> ruoli, Set<Messaggio> messaggi) {
+	public Utente(Long id, String username, String password, String nome, String cognome, Date dateCreated, StatoUtente stato, Set<Ruolo> ruoli) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
@@ -62,20 +59,6 @@ public class Utente {
 		this.dateCreated = dateCreated;
 		this.stato = stato;
 		this.ruoli = ruoli;
-		this.messaggi = messaggi;
-	}
-
-	
-
-	public Utente(String username, String password, String nome, String cognome, Date dateCreated, StatoUtente stato, Set<Ruolo> ruoli, Set<Messaggio> messaggi) {
-		this.username = username;
-		this.password = password;
-		this.nome = nome;
-		this.cognome = cognome;
-		this.dateCreated = dateCreated;
-		this.stato = stato;
-		this.ruoli = ruoli;
-		this.messaggi = messaggi;
 	}
 
 	public Utente(String username, String password, String nome, String cognome, Date dateCreated, StatoUtente stato, Set<Ruolo> ruoli) {
@@ -171,14 +154,6 @@ public class Utente {
 
 	public void setRuoli(Set<Ruolo> ruoli) {
 		this.ruoli = ruoli;
-	}
-
-	public Set<Messaggio> getMessaggi() {
-		return messaggi;
-	}
-
-	public void setMessaggi(Set<Messaggio> messaggi) {
-		this.messaggi = messaggi;
 	}
 
 	public boolean isAdmin() {

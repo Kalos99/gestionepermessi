@@ -45,7 +45,7 @@ public class Dipendente {
 	private Sesso sesso;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "utente_id", referencedColumnName = "id", nullable = false)
+	@JoinColumn(name = "utente_id", referencedColumnName = "id", nullable = false, unique = true)
 	private Utente utente;
 	
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "dipendente")

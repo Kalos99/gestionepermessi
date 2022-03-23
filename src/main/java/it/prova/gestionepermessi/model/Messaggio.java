@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,19 +21,19 @@ public class Messaggio {
 	@Column(name = "letto")
 	private Boolean letto = false;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "utente_id", nullable = false)
-	private Utente utenteInserimento;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "richiestapermesso_id", referencedColumnName = "id", nullable = false, unique = true)
+	private RichiestaPermesso richiesta;
 
 	public Messaggio() {
 	}
 
-	public Messaggio(Long id, String testo, String oggetto, Boolean letto, Utente utenteInserimento) {
+	public Messaggio(Long id, String testo, String oggetto, Boolean letto, RichiestaPermesso richiesta) {
 		this.id = id;
 		this.testo = testo;
 		this.oggetto = oggetto;
 		this.letto = letto;
-		this.utenteInserimento = utenteInserimento;
+		this.richiesta = richiesta;
 	}
 
 	public Messaggio(Long id, String testo, String oggetto, Boolean letto) {
@@ -42,11 +43,11 @@ public class Messaggio {
 		this.letto = letto;
 	}
 
-	public Messaggio(String testo, String oggetto, Boolean letto, Utente utenteInserimento) {
+	public Messaggio(String testo, String oggetto, Boolean letto, RichiestaPermesso richiesta) {
 		this.testo = testo;
 		this.oggetto = oggetto;
 		this.letto = letto;
-		this.utenteInserimento = utenteInserimento;
+		this.richiesta = richiesta;
 	}
 
 	public Messaggio(String testo, String oggetto, Boolean letto) {
@@ -87,11 +88,11 @@ public class Messaggio {
 		this.letto = letto;
 	}
 
-	public Utente getUtenteInserimento() {
-		return utenteInserimento;
+	public RichiestaPermesso getRichiesta() {
+		return richiesta;
 	}
 
-	public void setUtenteInserimento(Utente utenteInserimento) {
-		this.utenteInserimento = utenteInserimento;
+	public void setRichiesta(RichiestaPermesso richiesta) {
+		this.richiesta = richiesta;
 	}
 }
