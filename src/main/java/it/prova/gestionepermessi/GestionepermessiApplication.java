@@ -49,7 +49,7 @@ public class GestionepermessiApplication implements CommandLineRunner {
 			utenteServiceInstance.changeUserAbilitation(admin.getId());
 		}
 
-		if (utenteServiceInstance.findByUsername("user") == null) {
+		if (utenteServiceInstance.findByUsername("backoffice") == null) {
 			Utente backOfficeUser = new Utente("backoffice", "backoffice", "Vincenzo", "Corsello", new Date());
 			backOfficeUser.getRuoli()
 					.add(ruoloServiceInstance.cercaPerDescrizioneECodice("Back Office User", "ROLE_BO_USER"));

@@ -54,8 +54,6 @@ public class UtenteConRuoliDTO {
 		this.stato = stato;
 		this.ruoli = ruoli;
 	}
-	
-	
 
 	public UtenteConRuoliDTO(Long id, String username, String nome, String cognome, Date dateCreated, StatoUtente stato, Set<RuoloDTO> ruoli) {
 		this.id = id;
@@ -65,9 +63,7 @@ public class UtenteConRuoliDTO {
 		this.dateCreated = dateCreated;
 		this.stato = stato;
 		this.ruoli = ruoli;
-	}
-	
-	
+	}	
 
 	public UtenteConRuoliDTO(Long id, String username, String nome, String cognome, Date dateCreated, StatoUtente stato) {
 		this.id = id;
