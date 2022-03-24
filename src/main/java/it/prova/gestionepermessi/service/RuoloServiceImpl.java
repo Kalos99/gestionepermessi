@@ -1,5 +1,6 @@
 package it.prova.gestionepermessi.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,4 +48,18 @@ public class RuoloServiceImpl implements RuoloService {
 		return ruoloRepository.findByDescrizioneAndCodice(descrizione, codice);
 	}
 
+	@Override
+	public List<Ruolo> listAllExceptAdmin() {
+		List<Ruolo> ruoliDaMostrare = new ArrayList<Ruolo>();
+		ruoliDaMostrare.add(ruoloRepository.findByDescrizioneAndCodice("Dipendente User", "ROLE_DIPENDENTE_USER"));
+		ruoliDaMostrare.add(ruoloRepository.findByDescrizioneAndCodice("Back Office User", "ROLE_BO_USER"));
+		return ruoliDaMostrare;
+	}
+
+	@Transactional(readOnly = true)
+	public Ruolo cercaPerCodice(String codice) {
+		Ruolo ruolo = ruoloRepository.findByCodice(codice);
+		System.out.println(ruolo.toString());
+		return ruolo;
+	}
 }

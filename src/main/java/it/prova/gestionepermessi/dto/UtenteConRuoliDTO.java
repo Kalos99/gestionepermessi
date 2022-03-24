@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import it.prova.gestionepermessi.model.Dipendente;
 import it.prova.gestionepermessi.model.Ruolo;
 import it.prova.gestionepermessi.model.StatoUtente;
 import it.prova.gestionepermessi.model.Utente;
@@ -148,7 +147,7 @@ public class UtenteConRuoliDTO {
 			result.setRuoli(Arrays.asList(ruoli).stream().map(id -> new Ruolo()).collect(Collectors.toSet()));
 		
 		if(includeDipendente && dipendente.getId() != null)
-			result.setDipendente(dipendente.buildDipendenteModel());
+			result.setDipendente(dipendente.buildDipendenteModel(true));
 
 		return result;
 	}

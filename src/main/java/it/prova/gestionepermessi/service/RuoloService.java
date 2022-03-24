@@ -8,6 +8,8 @@ public interface RuoloService {
 	
 	public List<Ruolo> listAll() ;
 	
+	public List<Ruolo> listAllExceptAdmin() ;
+	
 	public Ruolo caricaSingoloElemento(Long id) ;
 
 	public void aggiorna(Ruolo ruoloInstance) ;
@@ -17,5 +19,7 @@ public interface RuoloService {
 	public void rimuovi(Ruolo ruoloInstance) ;
 
 	public Ruolo cercaPerDescrizioneECodice(String descrizione, String codice) ;
+	
+	public Ruolo cercaPerCodice(String codice) ;
 
 }

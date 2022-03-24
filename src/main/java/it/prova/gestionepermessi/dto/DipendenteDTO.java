@@ -1,6 +1,5 @@
 package it.prova.gestionepermessi.dto;
 
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -11,7 +10,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import it.prova.gestionepermessi.model.Dipendente;
-import it.prova.gestionepermessi.model.RichiestaPermesso;
 import it.prova.gestionepermessi.model.Sesso;
 
 public class DipendenteDTO {
@@ -27,7 +25,6 @@ public class DipendenteDTO {
 	@NotBlank(message = "{codFis.notblank}")
 	private String codFis;
 
-	@NotBlank(message = "{email.notblank}")
 	private String email;
 
 	@NotNull(message = "{dataNascita.notnull}")
@@ -38,16 +35,32 @@ public class DipendenteDTO {
 
 	private Date dataDimissioni;
 
-	@NotBlank(message = "{sesso.notblank}")
+	@NotNull(message = "{sesso.notblank}")
 	private Sesso sesso;
 
 	private Set<RichiestaPermessoDTO> richieste = new HashSet<RichiestaPermessoDTO>(0);
+	
+	private String ruolo;
 
 	public DipendenteDTO() {
 	}
 
 	public DipendenteDTO(Long id) {
 		this.id = id;
+	}
+	
+	public DipendenteDTO(Long id, String nome, String cognome, String codFis, String email, Date dataNascita, Date dataAssunzione, Date dataDimissioni, Sesso sesso, Set<RichiestaPermessoDTO> richieste, String ruolo) {
+		this.id = id;
+		this.nome = nome;
+		this.cognome = cognome;
+		this.codFis = codFis;
+		this.email = email;
+		this.dataNascita = dataNascita;
+		this.dataAssunzione = dataAssunzione;
+		this.dataDimissioni = dataDimissioni;
+		this.sesso = sesso;
+		this.richieste = richieste;
+		this.ruolo = ruolo;
 	}
 
 	public DipendenteDTO(Long id, String nome, String cognome, String codFis, String email, Date dataNascita, Date dataAssunzione, Date dataDimissioni, Sesso sesso, Set<RichiestaPermessoDTO> richieste) {
@@ -203,6 +216,14 @@ public class DipendenteDTO {
 		this.sesso = sesso;
 	}
 
+	public String getRuolo() {
+		return ruolo;
+	}
+
+	public void setRuolo(String ruolo) {
+		this.ruolo = ruolo;
+	}
+
 	public Set<RichiestaPermessoDTO> getRichieste() {
 		return richieste;
 	}
@@ -211,10 +232,8 @@ public class DipendenteDTO {
 		this.richieste = richieste;
 	}
 	
-	public Dipendente buildDipendenteModel() {
+	public Dipendente buildDipendenteModel(boolean includeRole) {
 		Dipendente result = new Dipendente(this.id, this.nome, this.cognome, this.codFis, this.email, this.dataNascita, this.dataAssunzione, this.dataDimissioni, this.sesso);
-		if (richieste != null)
-			result.setRichieste(Arrays.asList(richieste).stream().map(id -> new RichiestaPermesso()).collect(Collectors.toSet()));
 
 		return result;
 	}

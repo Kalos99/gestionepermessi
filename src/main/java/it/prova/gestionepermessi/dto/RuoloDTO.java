@@ -41,6 +41,10 @@ public class RuoloDTO {
 	public void setCodice(String codice) {
 		this.codice = codice;
 	}
+	
+	public Ruolo buildRuoloModel() {
+		return new Ruolo(this.id, this.descrizione, this.codice);
+	}
 
 	public static RuoloDTO buildRuoloDTOFromModel(Ruolo ruoloModel) {
 		return new RuoloDTO(ruoloModel.getId(), ruoloModel.getDescrizione(), ruoloModel.getCodice());

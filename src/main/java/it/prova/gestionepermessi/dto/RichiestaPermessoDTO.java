@@ -167,7 +167,7 @@ public class RichiestaPermessoDTO {
 	}
 	
 	public RichiestaPermesso buildRichiestaPermessoModel() {
-		return new RichiestaPermesso(this.id, this.tipoPermesso, this.dataInizio, this.dataFine, this.approvato, this.codiceCertificato, this.note, this.attachment.buildAttachmentModel(), this.dipendente.buildDipendenteModel());
+		return new RichiestaPermesso(this.id, this.tipoPermesso, this.dataInizio, this.dataFine, this.approvato, this.codiceCertificato, this.note, this.attachment.buildAttachmentModel(), this.dipendente.buildDipendenteModel(true));
 	}
 
 	public static RichiestaPermessoDTO buildRichiestaPermessoDTOFromModel(RichiestaPermesso richiestaModel) {
