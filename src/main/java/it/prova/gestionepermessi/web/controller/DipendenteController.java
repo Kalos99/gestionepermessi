@@ -20,8 +20,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.prova.gestionepermessi.dto.DipendenteDTO;
 import it.prova.gestionepermessi.dto.RuoloDTO;
+import it.prova.gestionepermessi.dto.UtenteDTO;
 import it.prova.gestionepermessi.model.Dipendente;
 import it.prova.gestionepermessi.model.Ruolo;
+import it.prova.gestionepermessi.model.Utente;
 //import it.prova.gestionepermessi.model.Ruolo;
 import it.prova.gestionepermessi.service.DipendenteService;
 import it.prova.gestionepermessi.service.RuoloService;
@@ -90,5 +92,12 @@ public class DipendenteController {
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/dipendente";
+	}
+	
+	@GetMapping("/edit/{idDipendente}")
+	public String edit(@PathVariable(required = true) Long idDipendente, Model model) {
+		Dipendente dipendenteModel = dipendenteService.caricaSingoloDipendente(idDipendente);
+		model.addAttribute("edit_dipendente_attr", DipendenteDTO.buildDipendenteDTOFromModel(dipendenteModel));
+		return "dipendente/edit";
 	}
 }

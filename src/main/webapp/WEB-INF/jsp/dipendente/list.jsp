@@ -53,6 +53,7 @@
 										<td>${dipendenteItem.email }</td>
 										<td>
 											<a class="btn btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/dipendente/show/${dipendenteItem.id }">Visualizza</a>
+											<a class="btn  btn-sm btn-outline-primary ml-2 mr-2" href="${pageContext.request.contextPath}/dipendente/edit/${dipendenteItem.id }">Edit</a>
 										</td>
 									</tr>
 								</c:forEach>
