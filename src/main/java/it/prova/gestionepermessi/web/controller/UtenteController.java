@@ -31,7 +31,6 @@ import it.prova.gestionepermessi.validation.ValidationWithPassword;
 @Controller
 @RequestMapping(value = "/utente")
 public class UtenteController {
-	
 
 	@Autowired
 	private UtenteService utenteService;
@@ -59,8 +58,8 @@ public class UtenteController {
 			@RequestParam(defaultValue = "0") Integer pageSize, @RequestParam(defaultValue = "id") String sortBy,
 			ModelMap model) {
 
-		List<Utente> utenti = utenteService.findByExample(utenteExample.buildUtenteModel(true), pageNo,
-				pageSize, sortBy).getContent();
+		List<Utente> utenti = utenteService
+				.findByExample(utenteExample.buildUtenteModel(true, true), pageNo, pageSize, sortBy).getContent();
 
 		model.addAttribute("utente_list_attribute", UtenteConRuoliDTO.createUtenteConRuoliDTOListFromModelList(utenti));
 		return "utente/list";
@@ -85,15 +84,16 @@ public class UtenteController {
 			model.addAttribute("ruoli_totali_attr", RuoloDTO.createRuoloDTOListFromModelList(ruoloService.listAll()));
 			return "utente/insert";
 		}
-		utenteService.inserisciNuovoECensisciDipendente(utenteDTO.buildUtenteModel(true));
+		utenteService.inserisciNuovoECensisciDipendente(utenteDTO.buildUtenteModel(true, true));
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/utente";
 	}
-	
+
 	@GetMapping("/show/{idUtente}")
 	public String show(@PathVariable(required = true) Long idUtente, Model model) {
-		model.addAttribute("show_utente_attr", UtenteConRuoliDTO.buildUtenteConRuoliDTOFromModel(utenteService.caricaSingoloUtenteConRuoli(idUtente)));
+		model.addAttribute("show_utente_attr",
+				UtenteConRuoliDTO.buildUtenteConRuoliDTOFromModel(utenteService.caricaSingoloUtenteConRuoli(idUtente)));
 		return "utente/show";
 	}
 
@@ -113,7 +113,7 @@ public class UtenteController {
 			model.addAttribute("ruoli_totali_attr", RuoloDTO.createRuoloDTOListFromModelList(ruoloService.listAll()));
 			return "utente/edit";
 		}
-		utenteService.aggiornaUtenteEDipendente(utenteDTO.buildUtenteModel(true));
+		utenteService.aggiornaUtenteEDipendente(utenteDTO.buildUtenteModel(true, true));
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/utente";

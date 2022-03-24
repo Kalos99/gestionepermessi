@@ -8,16 +8,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "utente")
@@ -31,10 +30,6 @@ public class Utente {
 	private String username;
 	@Column(name = "password")
 	private String password;
-	@Column(name = "nome")
-	private String nome;
-	@Column(name = "cognome")
-	private String cognome;
 	@Column(name = "dateCreated")
 	private Date dateCreated;
 
@@ -46,8 +41,8 @@ public class Utente {
 	@JoinTable(name = "utente_ruolo", joinColumns = @JoinColumn(name = "utente_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ruolo_id", referencedColumnName = "ID"))
 	private Set<Ruolo> ruoli = new HashSet<>(0);
 	
-	@OneToOne(fetch = FetchType.LAZY, mappedBy = "utente")
-//	@JoinColumn(name = "dipendente_id", referencedColumnName = "id", nullable = false, unique = true)
+	@OneToOne(mappedBy = "utente")
+	@NotNull
 	private Dipendente dipendente;
 	
 	public Utente() {
@@ -58,82 +53,64 @@ public class Utente {
 		this.id = id;
 		this.username = username;
 		this.password = password;
-		this.nome = nome;
-		this.cognome = cognome;
 		this.dateCreated = dateCreated;
 		this.stato = stato;
 		this.ruoli = ruoli;
 		this.dipendente = dipendente;
 	}
 
-	public Utente(Long id, String nome, String cognome, StatoUtente stato, Set<Ruolo> ruoli) {
+	public Utente(Long id, StatoUtente stato, Set<Ruolo> ruoli) {
 		this.id = id;
-		this.nome = nome;
-		this.cognome = cognome;
 		this.stato = stato;
 		this.ruoli = ruoli;
 	}
 
-	public Utente(String nome, String cognome, StatoUtente stato, Set<Ruolo> ruoli) {
-		this.nome = nome;
-		this.cognome = cognome;
+	public Utente(StatoUtente stato, Set<Ruolo> ruoli) {
 		this.stato = stato;
 		this.ruoli = ruoli;
 	}
 
-	public Utente(Long id, String username, String password, String nome, String cognome, Date dateCreated, StatoUtente stato, Set<Ruolo> ruoli) {
+	public Utente(Long id, String username, String password, Date dateCreated, StatoUtente stato, Set<Ruolo> ruoli) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
-		this.nome = nome;
-		this.cognome = cognome;
 		this.dateCreated = dateCreated;
 		this.stato = stato;
 		this.ruoli = ruoli;
 	}
 
-	public Utente(String username, String password, String nome, String cognome, Date dateCreated, StatoUtente stato, Set<Ruolo> ruoli) {
+	public Utente(String username, String password, Date dateCreated, StatoUtente stato, Set<Ruolo> ruoli) {
 		this.username = username;
 		this.password = password;
-		this.nome = nome;
-		this.cognome = cognome;
 		this.dateCreated = dateCreated;
 		this.stato = stato;
 		this.ruoli = ruoli;
 	}
 
-	public Utente(String username, String password, String nome, String cognome, Date dateCreated, StatoUtente stato) {
+	public Utente(String username, String password, Date dateCreated, StatoUtente stato) {
 		this.username = username;
 		this.password = password;
-		this.nome = nome;
-		this.cognome = cognome;
 		this.dateCreated = dateCreated;
 		this.stato = stato;
 	}
 
 	
 
-	public Utente(Long id, String username, String password, String nome, String cognome, Date dateCreated, StatoUtente stato) {
+	public Utente(Long id, String username, String password, Date dateCreated, StatoUtente stato) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
-		this.nome = nome;
-		this.cognome = cognome;
 		this.dateCreated = dateCreated;
 		this.stato = stato;
 	}
 
-	public Utente(String username, String password, String nome, String cognome, Date dateCreated) {
+	public Utente(String username, String password, Date dateCreated) {
 		this.username = username;
 		this.password = password;
-		this.nome = nome;
-		this.cognome = cognome;
 		this.dateCreated = dateCreated;
 	}
 
-	public Utente(String nome, String cognome, Date dateCreated) {
-		this.nome = nome;
-		this.cognome = cognome;
+	public Utente(Date dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
@@ -159,22 +136,6 @@ public class Utente {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getCognome() {
-		return cognome;
-	}
-
-	public void setCognome(String cognome) {
-		this.cognome = cognome;
 	}
 
 	public Date getDateCreated() {
@@ -212,6 +173,14 @@ public class Utente {
 	public boolean isAdmin() {
 		for (Ruolo ruoloItem : ruoli) {
 			if (ruoloItem.getCodice().equals(Ruolo.ROLE_ADMIN))
+				return true;
+		}
+		return false;
+	}
+	
+	public boolean isBackOffice() {
+		for (Ruolo ruoloItem : ruoli) {
+			if (ruoloItem.getCodice().equals(Ruolo.ROLE_BO_USER))
 				return true;
 		}
 		return false;

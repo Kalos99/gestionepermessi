@@ -8,11 +8,10 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import it.prova.gestionepermessi.model.Dipendente;
 import it.prova.gestionepermessi.model.Ruolo;
 import it.prova.gestionepermessi.model.StatoUtente;
 import it.prova.gestionepermessi.model.Utente;
-import it.prova.gestionepermessi.validation.ValidationNoPassword;
-import it.prova.gestionepermessi.validation.ValidationWithPassword;
 
 public class UtenteDTO {
 	private Long id;
@@ -25,41 +24,31 @@ public class UtenteDTO {
 
 	private String confermaPassword;
 
-	@NotBlank(message = "{nome.notblank}", groups = { ValidationWithPassword.class, ValidationNoPassword.class })
-	private String nome;
-
-	@NotBlank(message = "{cognome.notblank}", groups = { ValidationWithPassword.class, ValidationNoPassword.class })
-	private String cognome;
-
 	private Date dateCreated;
 
 	private StatoUtente stato;
 
 	private Long[] ruoliIds;
 
+	private DipendenteDTO dipendente;
+
 	public UtenteDTO() {
 	}
 
-	public UtenteDTO(Long id, String username, String nome, String cognome, StatoUtente stato) {
+	public UtenteDTO(Long id, String username, StatoUtente stato) {
 		super();
 		this.id = id;
 		this.username = username;
-		this.nome = nome;
-		this.cognome = cognome;
 		this.stato = stato;
 	}
 
-	public UtenteDTO(String nome, String cognome, Long[] ruoliIds) {
-		this.nome = nome;
-		this.cognome = cognome;
+	public UtenteDTO(Long[] ruoliIds) {
 		this.ruoliIds = ruoliIds;
 	}
 
-	public UtenteDTO(Long id, String username, String nome, String cognome, Date dateCreated, StatoUtente stato) {
+	public UtenteDTO(Long id, String username, Date dateCreated, StatoUtente stato) {
 		this.id = id;
 		this.username = username;
-		this.nome = nome;
-		this.cognome = cognome;
 		this.dateCreated = dateCreated;
 		this.stato = stato;
 	}
@@ -86,22 +75,6 @@ public class UtenteDTO {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getCognome() {
-		return cognome;
-	}
-
-	public void setCognome(String cognome) {
-		this.cognome = cognome;
 	}
 
 	public Date getDateCreated() {
@@ -135,20 +108,30 @@ public class UtenteDTO {
 	public void setRuoliIds(Long[] ruoliIds) {
 		this.ruoliIds = ruoliIds;
 	}
+	
+	public DipendenteDTO getDipendente() {
+		return dipendente;
+	}
 
-	public Utente buildUtenteModel(boolean includeIdRoles) {
-		Utente result = new Utente(this.id, this.username, this.password, this.nome, this.cognome, this.dateCreated,
-				this.stato);
+	public void setDipendente(DipendenteDTO dipendente) {
+		this.dipendente = dipendente;
+	}
+
+	public Utente buildUtenteModel(boolean includeIdRoles, boolean includeDipendente) {
+		Utente result = new Utente(this.id, this.username, this.password, this.dateCreated, this.stato);
 		if (includeIdRoles && ruoliIds != null)
 			result.setRuoli(Arrays.asList(ruoliIds).stream().map(id -> new Ruolo(id)).collect(Collectors.toSet()));
+		
+		if(includeDipendente && this.dipendente != null)
+			result.setDipendente(new Dipendente(this.dipendente.getNome(), this.dipendente.getCognome()));
 
 		return result;
 	}
 
 	// niente password...
 	public static UtenteDTO buildUtenteDTOFromModel(Utente utenteModel) {
-		UtenteDTO result = new UtenteDTO(utenteModel.getId(), utenteModel.getUsername(), utenteModel.getNome(),
-				utenteModel.getCognome(), utenteModel.getDateCreated(), utenteModel.getStato());
+		UtenteDTO result = new UtenteDTO(utenteModel.getId(), utenteModel.getUsername(), utenteModel.getDateCreated(),
+				utenteModel.getStato());
 
 		if (!utenteModel.getRuoli().isEmpty())
 			result.ruoliIds = utenteModel.getRuoli().stream().map(r -> r.getId()).collect(Collectors.toList())
@@ -156,7 +139,7 @@ public class UtenteDTO {
 
 		return result;
 	}
-	
+
 	public static List<UtenteDTO> createUtenteDTOListFromModelList(List<Utente> modelListInput) {
 		return modelListInput.stream().map(utenteEntity -> {
 			return UtenteDTO.buildUtenteDTOFromModel(utenteEntity);
@@ -169,10 +152,5 @@ public class UtenteDTO {
 
 	public boolean isDisabilitato() {
 		return this.stato != null && this.stato.equals(StatoUtente.DISABILITATO);
-	}
-
-	@Override
-	public String toString() {
-		return "UtenteDTO [nome=" + nome + ", cognome=" + cognome + ", ruoliIds=" + Arrays.toString(ruoliIds) + "]";
 	}
 }

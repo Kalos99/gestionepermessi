@@ -60,9 +60,6 @@ public class UtenteServiceImpl implements UtenteService {
 		Utente utenteReloaded = utenteRepository.findById(utenteInstance.getId()).orElse(null);
 		if(utenteReloaded == null)
 			throw new RuntimeException("Elemento non trovato");
-		utenteReloaded.setNome(utenteInstance.getNome());
-		utenteReloaded.setCognome(utenteInstance.getCognome());
-		utenteReloaded.setUsername(Character.toLowerCase(utenteInstance.getNome().charAt(0)) + "." + utenteInstance.getCognome().toLowerCase());
 		utenteReloaded.setRuoli(utenteInstance.getRuoli());
 		utenteRepository.save(utenteReloaded);
 	}
@@ -83,18 +80,21 @@ public class UtenteServiceImpl implements UtenteService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<Utente> findByExample(Utente example, Integer pageNo, Integer pageSize, String sortBy) {
+		System.out.println(example.getDipendente().getNome());
+		System.out.println(example.getDipendente().getCognome());
+
 		Specification<Utente> specificationCriteria = (root, query, cb) -> {
 
 			List<Predicate> predicates = new ArrayList<Predicate>();
 			
 			if (StringUtils.isNotEmpty(example.getUsername()))
-				predicates.add(cb.like(cb.upper(root.get("nome")), "%" + example.getNome().toUpperCase() + "%"));
+				predicates.add(cb.like(cb.upper(root.get("username")), "%" + example.getUsername().toUpperCase() + "%"));
 
-			if (StringUtils.isNotEmpty(example.getNome()))
-				predicates.add(cb.like(cb.upper(root.get("nome")), "%" + example.getNome().toUpperCase() + "%"));
+			if (StringUtils.isNotEmpty(example.getDipendente().getNome()))
+				predicates.add(cb.like(cb.upper(root.join("dipendente").get("nome")), "%" + example.getDipendente().getNome().toUpperCase() + "%"));
 
-			if (StringUtils.isNotEmpty(example.getCognome()))
-				predicates.add(cb.like(cb.upper(root.get("cognome")), "%" + example.getCognome().toUpperCase() + "%"));
+			if (StringUtils.isNotEmpty(example.getDipendente().getCognome()))
+				predicates.add(cb.like(cb.upper(root.join("dipendente").get("cognome")), "%" + example.getDipendente().getCognome().toUpperCase() + "%"));
 
 			if (example.getDateCreated() != null)
 				predicates.add(cb.greaterThanOrEqualTo(root.get("dateCreated"), example.getDateCreated()));
@@ -147,17 +147,15 @@ public class UtenteServiceImpl implements UtenteService {
 		return utenteRepository.findByUsername(username).orElse(null);
 	}
 
-	@Override
+	@Transactional
 	public void inserisciNuovoECensisciDipendente(Utente utenteInstance) {
 		utenteInstance.setStato(StatoUtente.CREATO);
 		utenteInstance.setPassword(passwordEncoder.encode(defaultPassword)); 
 		utenteInstance.setDateCreated(new Date());
-		utenteInstance.setUsername(Character.toLowerCase(utenteInstance.getNome().charAt(0)) + "." + utenteInstance.getCognome().toLowerCase());
-		utenteRepository.save(utenteInstance);
-		
-		Dipendente dipendenteInstance = new Dipendente(utenteInstance.getNome(), utenteInstance.getCognome());
+		Dipendente dipendenteInstance = new Dipendente();
 		dipendenteInstance.setUtente(utenteInstance);
 		
+		utenteRepository.save(utenteInstance);
 		dipendenteRepository.save(dipendenteInstance);
 		
 	}
@@ -166,19 +164,10 @@ public class UtenteServiceImpl implements UtenteService {
 	public void aggiornaUtenteEDipendente(Utente utenteInstance) {
 		// deve aggiornare solo nome, cognome, username, ruoli
 		Utente utenteReloaded = utenteRepository.findById(utenteInstance.getId()).orElse(null);
-		if (utenteReloaded == null)
+		Dipendente dipendenteAssociatoAdUtente = utenteReloaded.getDipendente();
+		if (utenteReloaded == null || dipendenteAssociatoAdUtente == null)
 			throw new RuntimeException("Elemento non trovato");
-		utenteReloaded.setNome(utenteInstance.getNome());
-		utenteReloaded.setCognome(utenteInstance.getCognome());
-		utenteReloaded.setUsername(Character.toLowerCase(utenteInstance.getNome().charAt(0)) + "." + utenteInstance.getCognome().toLowerCase());
 		utenteReloaded.setRuoli(utenteInstance.getRuoli());
 		utenteRepository.save(utenteReloaded);
-
-		Dipendente dipendenteAssociatoAdUtente = utenteReloaded.getDipendente();
-
-		dipendenteAssociatoAdUtente.setNome(utenteInstance.getNome());
-		dipendenteAssociatoAdUtente.setCognome(utenteInstance.getCognome());
-//		dipendenteAssociatoAdUtente.setEmail(dipendenteAssociatoAdUtente.buildEmail());
-		dipendenteRepository.save(dipendenteAssociatoAdUtente);
 	}
 }

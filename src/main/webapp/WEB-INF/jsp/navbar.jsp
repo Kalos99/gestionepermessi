@@ -44,7 +44,7 @@
 		<sec:authorize access="isAuthenticated()">
         	<div class="dropdown">
         	<button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-          		Utente: <sec:authentication property="name"/> (${userInfo.nome } ${userInfo.cognome })
+          		Utente: <sec:authentication property="name"/> (${userInfo.nomeDipendente } ${userInfo.cognomeDipendente })
         	</button>
        		<ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
           		<li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout">Logout</a></li>

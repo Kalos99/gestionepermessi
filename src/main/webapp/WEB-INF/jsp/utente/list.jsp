@@ -28,7 +28,6 @@
 			        <h5>Lista dei risultati</h5> 
 			    </div>
 			    <div class='card-body'>
-			    	<a class="btn btn-primary " href="${pageContext.request.contextPath}/utente/insert">Add New</a>
 			    	<a href="${pageContext.request.contextPath}/utente/search" class='btn btn-outline-secondary' >
 				            <i class='fa fa-chevron-left'></i> Torna alla Ricerca
 				        </a>
@@ -37,8 +36,6 @@
 			            <table class='table table-striped ' >
 			                <thead>
 			                    <tr>
-			                        <th>Nome</th>
-			                        <th>Cognome</th>
 			                        <th>Username</th>
 			                        <th>Stato</th>
 			                        <th>Azioni</th>
@@ -47,8 +44,6 @@
 			                <tbody>
 			                	<c:forEach items="${utente_list_attribute }" var="utenteItem">
 									<tr>
-										<td>${utenteItem.nome }</td>
-										<td>${utenteItem.cognome }</td>
 										<td>${utenteItem.username }</td>
 										<td>${utenteItem.stato }</td>
 										<td>

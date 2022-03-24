@@ -26,16 +26,6 @@
 					
 					    <div class='card-body'>
 					    	<dl class="row">
-							  <dt class="col-sm-3 text-right">Nome</dt>
-							  <dd class="col-sm-9">${ show_utente_attr.nome }</dd>
-					    	</dl>
-					    	
-					    	<dl class="row">
-							  <dt class="col-sm-3 text-right">Cognome:</dt>
-							  <dd class="col-sm-9">${ show_utente_attr.cognome  }</dd>
-					    	</dl>
-					    	
-					    	<dl class="row">
 							  <dt class="col-sm-3 text-right">Username:</dt>
 							  <dd class="col-sm-9">${ show_utente_attr.username }</dd>
 					    	</dl>

@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+import it.prova.gestionepermessi.model.Dipendente;
 import it.prova.gestionepermessi.model.Ruolo;
 import it.prova.gestionepermessi.model.StatoUtente;
 import it.prova.gestionepermessi.model.Utente;
@@ -30,46 +31,49 @@ public class UtenteConRuoliDTO {
 
 	private String confermaPassword;
 
-	@NotBlank(message = "{nome.notblank}", groups = { ValidationWithPassword.class, ValidationNoPassword.class })
-	private String nome;
-
-	@NotBlank(message = "{cognome.notblank}", groups = { ValidationWithPassword.class, ValidationNoPassword.class })
-	private String cognome;
-
 	private Date dateCreated;
 
 	private StatoUtente stato;
 
 	private Set<RuoloDTO> ruoli = new HashSet<RuoloDTO>();
+	
+	private DipendenteDTO dipendente;
 
 	public UtenteConRuoliDTO() {
 	}
+	
+	public UtenteConRuoliDTO(Long id, String username, String password, String confermaPassword, Date dateCreated, StatoUtente stato, Set<RuoloDTO> ruoli, DipendenteDTO dipendente) {
+		this.id = id;
+		this.username = username;
+		this.password = password;
+		this.confermaPassword = confermaPassword;
+		this.dateCreated = dateCreated;
+		this.stato = stato;
+		this.ruoli = ruoli;
+		this.dipendente = dipendente;
+	}
 
-	public UtenteConRuoliDTO(Long id, String username, String nome, String cognome, StatoUtente stato, Set<RuoloDTO> ruoli) {
+
+
+	public UtenteConRuoliDTO(Long id, String username, StatoUtente stato, Set<RuoloDTO> ruoli) {
 		super();
 		this.id = id;
 		this.username = username;
-		this.nome = nome;
-		this.cognome = cognome;
 		this.stato = stato;
 		this.ruoli = ruoli;
 	}
 
-	public UtenteConRuoliDTO(Long id, String username, String nome, String cognome, Date dateCreated, StatoUtente stato, Set<RuoloDTO> ruoli) {
+	public UtenteConRuoliDTO(Long id, String username, Date dateCreated, StatoUtente stato, Set<RuoloDTO> ruoli) {
 		this.id = id;
 		this.username = username;
-		this.nome = nome;
-		this.cognome = cognome;
 		this.dateCreated = dateCreated;
 		this.stato = stato;
 		this.ruoli = ruoli;
 	}	
 
-	public UtenteConRuoliDTO(Long id, String username, String nome, String cognome, Date dateCreated, StatoUtente stato) {
+	public UtenteConRuoliDTO(Long id, String username, Date dateCreated, StatoUtente stato) {
 		this.id = id;
 		this.username = username;
-		this.nome = nome;
-		this.cognome = cognome;
 		this.dateCreated = dateCreated;
 		this.stato = stato;
 	}
@@ -106,22 +110,6 @@ public class UtenteConRuoliDTO {
 		this.password = password;
 	}
 
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
-
-	public String getCognome() {
-		return cognome;
-	}
-
-	public void setCognome(String cognome) {
-		this.cognome = cognome;
-	}
-
 	public Date getDateCreated() {
 		return dateCreated;
 	}
@@ -146,19 +134,28 @@ public class UtenteConRuoliDTO {
 		this.confermaPassword = confermaPassword;
 	}
 
-	public Utente buildUtenteModel(boolean includeIdRoles) {
-		Utente result = new Utente(this.id, this.username, this.password, this.nome, this.cognome, this.dateCreated,
-				this.stato);
+	public DipendenteDTO getDipendente() {
+		return dipendente;
+	}
+
+	public void setDipendente(DipendenteDTO dipendente) {
+		this.dipendente = dipendente;
+	}
+
+	public Utente buildUtenteModel(boolean includeIdRoles, boolean includeDipendente) {
+		Utente result = new Utente(this.id, this.username, this.password, this.dateCreated, this.stato);
 		if (includeIdRoles && ruoli != null)
 			result.setRuoli(Arrays.asList(ruoli).stream().map(id -> new Ruolo()).collect(Collectors.toSet()));
+		
+		if(includeDipendente && dipendente.getId() != null)
+			result.setDipendente(dipendente.buildDipendenteModel());
 
 		return result;
 	}
 
 	// niente password...
 	public static UtenteConRuoliDTO buildUtenteConRuoliDTOFromModel(Utente utenteModel) {
-		UtenteConRuoliDTO result = new UtenteConRuoliDTO(utenteModel.getId(), utenteModel.getUsername(), utenteModel.getNome(),
-				utenteModel.getCognome(), utenteModel.getDateCreated(), utenteModel.getStato());
+		UtenteConRuoliDTO result = new UtenteConRuoliDTO(utenteModel.getId(), utenteModel.getUsername(), utenteModel.getDateCreated(), utenteModel.getStato());
 
 		if (!utenteModel.getRuoli().isEmpty())
 			result.ruoli = RuoloDTO.createRuoloDTOListFromModelList(utenteModel.getRuoli().stream().collect(Collectors.toList())).stream().collect(Collectors.toSet());
