@@ -14,6 +14,8 @@ public class MessaggioDTO {
 	private String oggetto;
 
 	private Boolean letto = false;
+	
+	private RichiestaPermessoDTO richiesta;
 
 	public MessaggioDTO() {
 	}
@@ -27,6 +29,14 @@ public class MessaggioDTO {
 		this.testo = testo;
 		this.oggetto = oggetto;
 		this.letto = letto;
+	}
+
+	public MessaggioDTO(Long id, String testo, String oggetto, Boolean letto, RichiestaPermessoDTO richiesta) {
+		this.id = id;
+		this.testo = testo;
+		this.oggetto = oggetto;
+		this.letto = letto;
+		this.richiesta = richiesta;
 	}
 
 	public Long getId() {
@@ -61,8 +71,25 @@ public class MessaggioDTO {
 		this.letto = letto;
 	}
 	
-	public Messaggio buildMessaggioModel() {
-		return new Messaggio(this.id, this.testo, this.oggetto, this.letto);
+	public RichiestaPermessoDTO getRichiesta() {
+		return richiesta;
+	}
+
+	public void setRichiesta(RichiestaPermessoDTO richiesta) {
+		this.richiesta = richiesta;
+	}
+	
+//	public Messaggio buildMessaggioModel() {
+//		return new Messaggio(this.id, this.testo, this.oggetto, this.letto);
+//	}
+
+	public Messaggio buildMessaggioModel(boolean includesRichiesta) {
+		Messaggio result = new Messaggio(this.id, this.testo, this.oggetto, this.letto);
+		
+		if (includesRichiesta && richiesta.getId() != null)
+			result.setRichiesta(richiesta.buildRichiestaPermessoModel(true, true));
+		
+		return result;
 	}
 
 	public static MessaggioDTO buildMessaggioDTOFromModel(Messaggio messaggioModel) {
