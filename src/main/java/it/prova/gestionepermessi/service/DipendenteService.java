@@ -26,4 +26,6 @@ public interface DipendenteService {
 	public void inserisciNuovoECensisciUtente(Dipendente dipendenteInstance, Ruolo ruoloInput);
 	
 	public void aggiornaDipendenteEUtente(Dipendente dipendenteInstance);
+	
+	public List<Dipendente> cercaByCognomeENomeILike(String term);
 }

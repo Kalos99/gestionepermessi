@@ -23,7 +23,7 @@ public class RichiestaPermessoDTO {
 	@NotNull(message = "{dataFine.notnull}")
 	private Date dataFine;
 
-	private Boolean approvato = false;
+	private Boolean approvato;
 
 	private String codiceCertificato;
 
@@ -166,8 +166,15 @@ public class RichiestaPermessoDTO {
 		this.dipendente = dipendente;
 	}
 	
-	public RichiestaPermesso buildRichiestaPermessoModel() {
-		return new RichiestaPermesso(this.id, this.tipoPermesso, this.dataInizio, this.dataFine, this.approvato, this.codiceCertificato, this.note, this.attachment.buildAttachmentModel(), this.dipendente.buildDipendenteModel(true));
+	public RichiestaPermesso buildRichiestaPermessoModel(boolean includesAttachment, boolean includesDipendente) {
+		RichiestaPermesso result = new RichiestaPermesso(this.id, this.tipoPermesso, this.dataInizio, this.dataFine, this.approvato, this.codiceCertificato, this.note);
+		
+		if (includesAttachment && attachment.getId() != null)
+			result.setAttachment(attachment.buildAttachmentModel());
+		
+		if (includesDipendente && dipendente.getId() != null)
+			result.setDipendente(dipendente.buildDipendenteModel(true));
+		return result;
 	}
 
 	public static RichiestaPermessoDTO buildRichiestaPermessoDTOFromModel(RichiestaPermesso richiestaModel) {

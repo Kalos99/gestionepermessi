@@ -72,7 +72,7 @@
 									</div>
 										
 									<fmt:formatDate pattern='yyyy-MM-dd' var="parsedDate" type='date' value='${edit_dipendente_attr.dataNascita}' />
-									<div class="col-md-3">
+									<div class="col-md-6">
 										<label for="dataNascita" class="form-label">Data di Nascita <span class="text-danger">*</span></label>
 	                        			<spring:bind path="dataNascita">
 		                        		<input class="form-control ${status.error ? 'is-invalid' : ''}" id="dataNascita" type="date" placeholder="dd/MM/yy"
@@ -91,6 +91,17 @@
 		                            		value="${parsedDate}" >
 			                            </spring:bind>
 		                            	<form:errors  path="dataAssunzione" cssClass="error_field" />
+									</div>
+																			
+									<fmt:formatDate pattern='yyyy-MM-dd' var="parsedDate" type='date' value='${edit_dipendente_attr.dataAssunzione}' />
+									<div class="col-md-3">
+										<label for="dataAssunzione" class="form-label">Data dimissioni <span class="text-danger">*</span></label>
+	                        			<spring:bind path="dataDimissioni">
+		                        		<input class="form-control ${status.error ? 'is-invalid' : ''}" id="dataDimissioni" type="date" placeholder="dd/MM/yy"
+		                            		title="formato : gg/mm/aaaa"  name="dataDimissioni" 
+		                            		value="${parsedDate}" >
+			                            </spring:bind>
+		                            	<form:errors  path="dataDimissioni" cssClass="error_field" />
 									</div>
 									
 									<div class="col-md-6">

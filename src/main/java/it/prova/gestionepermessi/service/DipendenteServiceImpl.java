@@ -144,4 +144,9 @@ public class DipendenteServiceImpl implements DipendenteService{
 		repository.save(dipendenteInstance);
 		utenteRepository.save(utenteAssociatoADipendente);
 	}
+
+	@Override
+	public List<Dipendente> cercaByCognomeENomeILike(String term) {
+		return repository.findByCognomeIgnoreCaseContainingOrNomeIgnoreCaseContainingOrderByNomeAsc(term, term);
+	}
 }

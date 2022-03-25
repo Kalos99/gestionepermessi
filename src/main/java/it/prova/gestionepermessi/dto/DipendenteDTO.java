@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import it.prova.gestionepermessi.model.Dipendente;
 import it.prova.gestionepermessi.model.Sesso;
@@ -23,6 +24,7 @@ public class DipendenteDTO {
 	private String cognome;
 
 	@NotBlank(message = "{codFis.notblank}")
+	@Size(min = 16, max = 16, message = "Il codice fiscale deve essere lungo esattamente {max} caratteri")
 	private String codFis;
 
 	private String email;
@@ -242,8 +244,8 @@ public class DipendenteDTO {
 	public static DipendenteDTO buildDipendenteDTOFromModel(Dipendente dipendenteModel) {
 		DipendenteDTO result = new DipendenteDTO(dipendenteModel.getId(), dipendenteModel.getNome(), dipendenteModel.getCognome(), dipendenteModel.getCodFis(), dipendenteModel.getEmail(), dipendenteModel.getDataNascita(), dipendenteModel.getDataAssunzione(), dipendenteModel.getDataDimissioni(), dipendenteModel.getSesso());
 
-		if (!dipendenteModel.getRichieste().isEmpty())
-			result.richieste = RichiestaPermessoDTO.createRichiestaPermessoDTOListFromModelList(dipendenteModel.getRichieste().stream().collect(Collectors.toList())).stream().collect(Collectors.toSet());
+//		if (!dipendenteModel.getRichieste().isEmpty())
+//			result.richieste = RichiestaPermessoDTO.createRichiestaPermessoDTOListFromModelList(dipendenteModel.getRichieste().stream().collect(Collectors.toList())).stream().collect(Collectors.toSet());
 		return result;
 	}
 	
