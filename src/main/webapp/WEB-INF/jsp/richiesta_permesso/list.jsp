@@ -1,4 +1,5 @@
 <%@page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!doctype html>
 <html lang="it" class="h-100">
@@ -47,9 +48,10 @@
 										<td>${richiestaItem.tipoPermesso }</td>
 										<td>${richiestaItem.approvato }</td>
 										<td>
-											<a class="btn btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/richiesta_permesso/show/${utenteItem.id }">Visualizza</a>
-											<a class="btn  btn-sm btn-outline-primary ml-2 mr-2" href="${pageContext.request.contextPath}/richiesta_permesso/edit/${utenteItem.id }">Edit</a>
-<%-- 											<a id="changeStatoLink_#_${richiesraItem.id }" class="btn btn-outline-${utenteItem.isAttivo()?'danger':'success'} btn-sm link-for-modal" data-bs-toggle="modal" data-bs-target="#confirmOperationModal"  >${richiestaPermesso.isApprovato()?'Disapprova':'Approva'}</a> --%>
+											<a class="btn btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/richiesta_permesso/show/${richiestaItem.id }">Visualizza</a>
+											<sec:authorize access="hasRole('DIPENDENTE_USER')">
+												<a class="btn  btn-sm btn-outline-primary ml-2 mr-2" href="${pageContext.request.contextPath}/richiesta_permesso/edit/${richiestaItem.id }">Edit</a>
+											</sec:authorize>
 										</td>
 									</tr>
 								</c:forEach>

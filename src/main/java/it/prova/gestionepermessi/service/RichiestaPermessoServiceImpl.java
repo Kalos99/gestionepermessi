@@ -1,6 +1,7 @@
 package it.prova.gestionepermessi.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.Predicate;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import it.prova.gestionepermessi.model.RichiestaPermesso;
 import it.prova.gestionepermessi.repository.richiestapermesso.RichiestaPermessoRepository;
@@ -41,6 +43,7 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 
 	@Override
 	public void inserisciNuovo(RichiestaPermesso richiestaInstance) {
+		richiestaInstance.setApprovato(false);
 		repository.save(richiestaInstance);
 		
 	}
@@ -87,5 +90,26 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 			paging = PageRequest.of(pageNo, pageSize, Sort.by(sortBy));
 
 		return repository.findAll(specificationCriteria, paging);
+	}
+
+	@Transactional(readOnly = true)
+	public RichiestaPermesso caricaSingolaRichiestaEager(Long id) {
+		return repository.findSingleRichiestaEager(id);
+	}
+
+	@Override
+	public void changeState(Long richiestaInstanceId) {
+		RichiestaPermesso richiestaInstance = caricaSingolaRichiesta(richiestaInstanceId);
+		if(richiestaInstance == null)
+			throw new RuntimeException("Elemento non trovato.");
+		if(richiestaInstance.getDataInizio().before(new Date())) {
+			throw new RuntimeException("mpossibile modificare stato richiesta");
+		}
+		
+		if(!(richiestaInstance.getApprovato()))
+			richiestaInstance.setApprovato(true);
+		else 
+			richiestaInstance.setApprovato(false);
+		repository.save(richiestaInstance);
 	}
 }

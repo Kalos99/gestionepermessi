@@ -2,16 +2,11 @@ package it.prova.gestionepermessi.web.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -66,5 +61,19 @@ public class RichiestaPermessoController {
 	public String createRichiestaPermesso(Model model) {
 		model.addAttribute("insert_richiesta_attr", new RichiestaPermessoDTO());
 		return "richiesta_permesso/insert";
+	}
+	
+	@GetMapping("/show/{idRichiesta}")
+	public String showRichiesta(@PathVariable(required = true) Long idRichiesta, Model model) {
+		model.addAttribute("show_richiesta_attr", richiestaPermessoService.caricaSingolaRichiestaEager(idRichiesta));
+		return "richiesta_permesso/show";
+	}
+	
+	@PostMapping("/cambiaStato")
+	public String cambiaStato(@RequestParam(name = "idRichiestaForChangingStato", required = true) Long idRichiesta, RedirectAttributes redirectAttrs) {
+		richiestaPermessoService.changeState(idRichiesta);
+		
+		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
+		return "redirect:/richiesta_permesso";
 	}
 }

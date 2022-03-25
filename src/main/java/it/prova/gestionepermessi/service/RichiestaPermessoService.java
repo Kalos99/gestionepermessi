@@ -11,6 +11,8 @@ public interface RichiestaPermessoService {
 	public List<RichiestaPermesso> listAllRichieste() ;
 
 	public RichiestaPermesso caricaSingolaRichiesta(Long id);
+	
+	public RichiestaPermesso caricaSingolaRichiestaEager(Long id);
 
 	public void aggiorna(RichiestaPermesso richiestaInstance);
 
@@ -19,5 +21,7 @@ public interface RichiestaPermessoService {
 	public void rimuovi(RichiestaPermesso richiestaInstance);
 
 	public Page<RichiestaPermesso> findByExample(RichiestaPermesso example, Integer pageNo, Integer pageSize, String sortBy);
+	
+	public void changeState(Long richiestaInstanceId);
 
 }

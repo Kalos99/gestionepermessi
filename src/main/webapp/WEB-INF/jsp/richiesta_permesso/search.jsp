@@ -145,13 +145,11 @@
 
 
 										<script>
-										$('.form-select').click(function(){
-											
+										$('.form-select').change(function(){
+											console.log("ciao");
 											if($('#tipoPermesso :selected').text()=== 'MALATTIA'){
-												//console.log("MALATTIA");
 												$("#certificato").removeClass('d-none');
 											}else{
-												//console.log("FERIE");
 												$("#certificato").addClass('d-none');
 											}
 										});

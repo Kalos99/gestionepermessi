@@ -160,4 +160,8 @@ public class RichiestaPermesso {
 	public void setDipendente(Dipendente dipendente) {
 		this.dipendente = dipendente;
 	}
+	
+	public boolean isApprovato() {
+		return this.approvato;
+	}
 }
