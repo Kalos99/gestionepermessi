@@ -24,4 +24,6 @@ public interface DipendenteService {
 	public Page<Dipendente> findByExample(Dipendente example, Integer pageNo, Integer pageSize, String sortBy);
 	
 	public void inserisciNuovoECensisciUtente(Dipendente dipendenteInstance, Ruolo ruoloInput);
+	
+	public void aggiornaDipendenteEUtente(Dipendente dipendenteInstance);
 }

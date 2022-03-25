@@ -129,4 +129,19 @@ public class DipendenteServiceImpl implements DipendenteService{
 		dipendenteInstance.setEmail(Character.toLowerCase(dipendenteInstance.getNome().charAt(0)) + "." + dipendenteInstance.getCognome().toLowerCase() + "@prova.it");
 		repository.save(dipendenteInstance);
 	}
+	
+	@Transactional
+	public void aggiornaDipendenteEUtente(Dipendente dipendenteInstance) {
+		// deve aggiornare solo nome, cognome, username, ruoli
+		Dipendente dipendenteReloaded = repository.findById(dipendenteInstance.getId()).orElse(null);
+		Utente utenteAssociatoADipendente = dipendenteReloaded.getUtente();
+		if (dipendenteReloaded == null || utenteAssociatoADipendente == null)
+			throw new RuntimeException("Elemento non trovato");
+		dipendenteInstance.setEmail(Character.toLowerCase(dipendenteInstance.getNome().charAt(0)) + "." + dipendenteInstance.getCognome().toLowerCase() + "@prova.it");
+		dipendenteInstance.setUtente(utenteAssociatoADipendente);
+		utenteAssociatoADipendente.setDipendente(dipendenteInstance);
+		utenteAssociatoADipendente.setUsername(Character.toLowerCase(dipendenteInstance.getNome().charAt(0)) + "." + dipendenteInstance.getCognome().toLowerCase());
+		repository.save(dipendenteInstance);
+		utenteRepository.save(utenteAssociatoADipendente);
+	}
 }
