@@ -1,3 +1,4 @@
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!doctype html>
@@ -78,32 +79,32 @@
 <!-- 					  </div> -->
 <!-- 					end info Regista -->
 <!-- 					</div> -->
-			    	
-			    	<!-- info Dipendente -->
-			    	<p>
-					  <a class="btn btn-primary btn-sm" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-					    Info Dipendente
-					  </a>
-					</p>
-					<div class="collapse" id="collapseExample">
-					  <div class="card card-body">
-					  	<dl class="row">
-						  <dt class="col-sm-3 text-right">Nome:</dt>
-						  <dd class="col-sm-9">${show_richiesta_attr.dipendente.nome}</dd>
-					   	</dl>
-					   	<dl class="row">
-						  <dt class="col-sm-3 text-right">Cognome:</dt>
-						  <dd class="col-sm-9">${show_richiesta_attr.dipendente.cognome}</dd>
-					   	</dl>
-					   	<dl class="row">
-						  <dt class="col-sm-3 text-right">Codice fiscale:</dt>
-						  <dd class="col-sm-9">${show_richiesta_attr.dipendente.codFis}</dd>
-					   	</dl>
-					    
-					  </div>
-					<!-- end info Regista -->
-					</div>
-			    	
+			    	<sec:authorize access="hasRole('BO_USER')">
+				    	<!-- info Dipendente -->
+				    	<p>
+						  <a class="btn btn-primary btn-sm" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+						    Info Dipendente
+						  </a>
+						</p>
+						<div class="collapse" id="collapseExample">
+						  <div class="card card-body">
+						  	<dl class="row">
+							  <dt class="col-sm-3 text-right">Nome:</dt>
+							  <dd class="col-sm-9">${show_richiesta_attr.dipendente.nome}</dd>
+						   	</dl>
+						   	<dl class="row">
+							  <dt class="col-sm-3 text-right">Cognome:</dt>
+							  <dd class="col-sm-9">${show_richiesta_attr.dipendente.cognome}</dd>
+						   	</dl>
+						   	<dl class="row">
+							  <dt class="col-sm-3 text-right">Codice fiscale:</dt>
+							  <dd class="col-sm-9">${show_richiesta_attr.dipendente.codFis}</dd>
+						   	</dl>
+						    
+						  </div>
+						<!-- end info Dipendente -->
+						</div>
+			    	</sec:authorize>
 			    <!-- end card body -->
 			    </div>
 			    
@@ -111,10 +112,12 @@
 			        <a href="${pageContext.request.contextPath }/richiesta_permesso" class='btn btn-outline-secondary' style='width:80px'>
 			            <i class='fa fa-chevron-left'></i> Back
 			        </a>
-			        <jsp:useBean id="now" class="java.util.Date"/>
-			        <c:if test ="${show_richiesta_attr.dataInizio.after(now) }" >
-			        	<a id="changeStatoLink_#_${show_richiesta_attr.id }" class="btn btn-outline-${show_richiesta_attr.isApprovato()?'danger':'success'} btn-sm link-for-modal" data-bs-toggle="modal" data-bs-target="#confirmOperationModal"  >${show_richiesta_attr.isApprovato()?'Disapprova':'Approva'}</a>
-			        </c:if>
+			 	    <sec:authorize access="hasRole('BO_USER')">
+				        <jsp:useBean id="now" class="java.util.Date"/>
+				        <c:if test ="${show_richiesta_attr.dataInizio.after(now) }" >
+				        	<a id="changeStatoLink_#_${show_richiesta_attr.id }" class="btn btn-outline-${show_richiesta_attr.isApprovato()?'danger':'success'} btn-sm link-for-modal" data-bs-toggle="modal" data-bs-target="#confirmOperationModal"  >${show_richiesta_attr.isApprovato()?'Disapprova':'Approva'}</a>
+				        </c:if>
+				    </sec:authorize>
 			    </div>
 			<!-- end card -->
 			</div>	

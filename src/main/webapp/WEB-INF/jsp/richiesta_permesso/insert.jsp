@@ -51,7 +51,7 @@
 								<form:form method="post" modelAttribute="insert_richiesta_attr" action="save" novalidate="novalidate" class="row g-3">
 									<input type="hidden" name="usernameUtente" value= <sec:authentication property = "principal.username"/> >
 								
-									<div class="col-md-10">
+									<div class="col-md-12">
 										<label for="tipoPermesso" class="form-label">Tipo permesso <span class="text-danger">*</span></label>
 										<spring:bind path="tipoPermesso">
 											<select class="form-select  ${status.error ? 'is-invalid' : ''}" id="tipoPermesso" name="tipoPermesso" required>
@@ -63,16 +63,24 @@
 										<form:errors  path="tipoPermesso" cssClass="error_field" />
 									</div>
 									
-									<div class="col-md-10 d-none" id="certificato">
+									<div class="col-md-12 d-none" id="certificato">
 										<label for="codiceCertificato" class="form-label">Codice certificato <span class="text-danger">*</span></label>
 										<spring:bind path="codiceCertificato">
 											<input type="text" name="codiceCertificato" id="codiceCertificato" class="form-control ${status.error ? 'is-invalid' : ''}" placeholder="Inserire il codice" value="${insert_richiesta_attr.codiceCertificato }" required>
 										</spring:bind>
 										<form:errors  path="codiceCertificato" cssClass="error_field" />
-									</div>						
+									</div>
+									
+<!-- 									<div class="col-md-6 d-none" id="allegato"> -->
+<!-- 										<label for="attachment" class="form-label">Allegato <span class="text-danger">*</span></label> -->
+<%-- 										<spring:bind path="attachment"> --%>
+<%-- 											<input type="file" name="attachment" id="attachment" class="form-control ${status.error ? 'is-invalid' : ''}" placeholder="caricare il file"  required> --%>
+<%-- 										</spring:bind> --%>
+<%-- 										<form:errors  path="codiceCertificato" cssClass="error_field" /> --%>
+<!-- 									</div>						 -->
 									
 									<fmt:formatDate pattern='yyyy-MM-dd' var="parsedDate" type='date' value='${insert_richiesta_attr.dataInizio}' />
-									<div class="col-md-5">
+									<div class="col-md-6">
 										<label for="dataInizio" class="form-label">Data inizio <span class="text-danger">*</span></label>
 	                        			<spring:bind path="dataInizio">
 		                        		<input class="form-control ${status.error ? 'is-invalid' : ''}" id="dataInizio" type="date" placeholder="dd/MM/yy"
@@ -83,7 +91,7 @@
 									</div>
 									
 									<fmt:formatDate pattern='yyyy-MM-dd' var="parsedDate" type='date' value='${insert_richiesta_attr.dataFine}' />
-									<div class="col-md-5">
+									<div class="col-md-6">
 										<label for="dataFine" class="form-label">Data fine <span class="text-danger">*</span></label>
 	                        			<spring:bind path="dataFine">
 		                        		<input class="form-control ${status.error ? 'is-invalid' : ''}" id="dataFine" type="date" placeholder="dd/MM/yy"
@@ -94,7 +102,7 @@
 									</div>
 									
 									<span>Note </span>
-									<div class="form-floating col-md-10">
+									<div class="form-floating col-md-12">
 									  <textarea name="note" id="note" class="form-control ${status.error ? 'is-invalid' : ''}" placeholder="Inserisci eventuali note" style="height: 100px"></textarea>
 									  <label for="note">Inserire eventuali note: </label>
 									</div>
@@ -117,9 +125,11 @@
 											if($('#tipoPermesso :selected').text()=== 'MALATTIA'){
 												//console.log("MALATTIA");
 												$("#certificato").removeClass('d-none');
+												$("#allegato").removeClass('d-none');
 											}else{
 												//console.log("FERIE");
 												$("#certificato").addClass('d-none');
+												$("#allegato").addClass('d-none');
 											}
 										});
 

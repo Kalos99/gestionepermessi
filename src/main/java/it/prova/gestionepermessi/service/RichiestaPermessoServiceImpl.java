@@ -16,7 +16,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.prova.gestionepermessi.model.Messaggio;
 import it.prova.gestionepermessi.model.RichiestaPermesso;
+import it.prova.gestionepermessi.repository.messaggio.MessaggioRepository;
 import it.prova.gestionepermessi.repository.richiestapermesso.RichiestaPermessoRepository;
 
 @Service
@@ -24,6 +26,9 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 	
 	@Autowired
 	private RichiestaPermessoRepository repository;
+	
+	@Autowired
+	private MessaggioRepository messaggioRepository;
 
 	@Override
 	public List<RichiestaPermesso> listAllRichieste() {
@@ -111,5 +116,18 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 		else 
 			richiestaInstance.setApprovato(false);
 		repository.save(richiestaInstance);
+	}
+
+	@Override
+	public void inserisciNuovaECreaMessaggio(RichiestaPermesso richiestaInstance) {
+		richiestaInstance.setApprovato(false);
+		Messaggio nuovoMessaggio = new Messaggio();
+		nuovoMessaggio.setLetto(false);
+		nuovoMessaggio.setOggetto("Richiesta permesso da parte di " + richiestaInstance.getDipendente().getNome() + " " + richiestaInstance.getDipendente().getCognome());
+		nuovoMessaggio.setTesto("Il dipendente " + richiestaInstance.getDipendente().getNome() + " " + richiestaInstance.getDipendente().getCognome() + " ha richiesto un permesso per " + richiestaInstance.getTipoPermesso() + " dal " + richiestaInstance.getDataInizio() + " al " + richiestaInstance.getDataFine());
+        nuovoMessaggio.setRichiesta(richiestaInstance);
+        
+		repository.save(richiestaInstance);
+		messaggioRepository.save(nuovoMessaggio);
 	}
 }

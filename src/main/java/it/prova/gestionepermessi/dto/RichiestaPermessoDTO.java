@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import it.prova.gestionepermessi.model.RichiestaPermesso;
@@ -14,7 +13,7 @@ public class RichiestaPermessoDTO {
 	
 	private Long id;
 
-	@NotBlank(message = "{tipoPermesso.notblank}")
+	@NotNull(message = "{tipoPermesso.notblank}")
 	private TipoPermesso tipoPermesso;
 
 	@NotNull(message = "{dataInizio.notnull}")

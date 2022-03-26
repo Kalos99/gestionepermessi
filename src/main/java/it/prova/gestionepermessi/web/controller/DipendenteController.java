@@ -88,8 +88,6 @@ public class DipendenteController {
 
 		
 		if (result.hasErrors()) {
-			System.out.println("stampa risultato");
-			System.out.println(result);
 			model.addAttribute("ruoli_totali_attr", RuoloDTO.createRuoloDTOListFromModelList(ruoloService.listAllExceptAdmin()));
 			return "dipendente/insert";
 		}

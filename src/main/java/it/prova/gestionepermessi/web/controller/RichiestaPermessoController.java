@@ -2,11 +2,15 @@ package it.prova.gestionepermessi.web.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +20,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.prova.gestionepermessi.dto.DipendenteDTO;
 import it.prova.gestionepermessi.dto.RichiestaPermessoDTO;
+
 import it.prova.gestionepermessi.model.RichiestaPermesso;
 import it.prova.gestionepermessi.model.Utente;
 import it.prova.gestionepermessi.service.DipendenteService;
@@ -66,6 +71,24 @@ public class RichiestaPermessoController {
 	public String createRichiestaPermesso(Model model) {
 		model.addAttribute("insert_richiesta_attr", new RichiestaPermessoDTO());
 		return "richiesta_permesso/insert";
+	}
+	
+	@PostMapping("/save")
+	public String saveRichiestaPermesso(@Valid @ModelAttribute("insert_richiesta_attr") RichiestaPermessoDTO richiestaDTO, BindingResult result, @RequestParam(name = "usernameUtente", required = true) String username,
+			Model model, RedirectAttributes redirectAttrs) {
+		
+		Utente utenteInPagina = utenteService.findByUsername(username);
+		richiestaDTO.setDipendente(DipendenteDTO.buildDipendenteDTOFromModel(dipendenteService.caricaSingoloDipendenteConUtente(utenteInPagina.getId())));
+		
+		if (result.hasErrors()) {
+			System.out.println(result.getFieldError());
+			return "richiesta_permesso/insert";
+		}
+
+		richiestaPermessoService.inserisciNuovaECreaMessaggio(richiestaDTO.buildRichiestaPermessoModel(false, true));
+
+		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
+		return "redirect:/richiesta_permesso/list";
 	}
 	
 	@GetMapping("/show/{idRichiesta}")

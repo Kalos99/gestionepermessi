@@ -17,6 +17,8 @@ public interface RichiestaPermessoService {
 	public void aggiorna(RichiestaPermesso richiestaInstance);
 
 	public void inserisciNuovo(RichiestaPermesso richiestaInstance);
+	
+	 public void inserisciNuovaECreaMessaggio(RichiestaPermesso richiestaInstance);
 
 	public void rimuovi(RichiestaPermesso richiestaInstance);
 
