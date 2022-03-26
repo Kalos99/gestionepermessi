@@ -78,4 +78,16 @@ public class MessaggioServiceImpl implements MessaggioService {
 		return repository.findAll(specificationCriteria, paging);
 	}
 
+	@Transactional(readOnly = true)
+	public Messaggio caricaSingoloMessaggioEager(Long id) {
+		return repository.findSingleMessageEager(id);
+	}
+
+	@Override
+	public void leggiMessaggio(Long idMessaggio) {
+		Messaggio messaggioReloaded = repository.findById(idMessaggio).get();
+		messaggioReloaded.setLetto(true);
+		repository.save(messaggioReloaded);
+	}
+
 }

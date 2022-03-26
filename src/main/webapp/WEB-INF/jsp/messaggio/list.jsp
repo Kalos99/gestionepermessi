@@ -37,7 +37,7 @@
 			                <thead>
 			                    <tr>
 			                        <th>Oggetto</th>
-			                        <th>Stato</th>
+			                        <th>Letto</th>
 			                        <th>Azioni</th>
 			                    </tr>
 			                </thead>
@@ -47,7 +47,7 @@
 										<td>${messaggioItem.oggetto }</td>
 										<td>${messaggioItem.letto }</td>
 										<td>
-											<a class="btn btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/messaggio/show/${dipendenteItem.id }">Visualizza</a>
+											<a class="btn btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/messaggio/show/${messaggioItem.id }">Visualizza</a>
 										</td>
 									</tr>
 								</c:forEach>
