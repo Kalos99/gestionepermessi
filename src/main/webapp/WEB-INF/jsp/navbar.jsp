@@ -31,6 +31,7 @@
 		          <a class="dropdown-item" href="${pageContext.request.contextPath}/messaggio/search">Gestione messaggi</a>
 		        </div>
 		      </li>
+		      <a class="btn btn-primary" href="${pageContext.request.contextPath}/messaggio">Messaggi non letti <span class="badge badge-warning">${unread_messages }</span></a>
 		   </sec:authorize>
 		   
 		   <sec:authorize access="hasRole('DIPENDENTE_USER')">
