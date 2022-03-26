@@ -13,6 +13,8 @@ public interface DipendenteService {
 
 	public Dipendente caricaSingoloDipendente(Long id);
 	
+	public Dipendente caricaSingoloDipendenteConUtente(Long id);
+	
 	public Dipendente caricaSingoloDipendenteConRichiestePermesso(Long id);
 
 	public void aggiorna(Dipendente utenteInstance);

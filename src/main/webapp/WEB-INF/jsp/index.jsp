@@ -140,7 +140,7 @@
 				     <div class="p-5 mb-4 bg-light rounded-3">
 					      <div class="container-fluid py-5">
 					        <h1 class="display-5 fw-bold">Benvenuto alla Gestione Permessi</h1>
-					        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/richiesta_permesso/search">Gestione Richieste</a>
+					        <a class="btn btn-primary btn-lg" href="${pageContext.request.contextPath}/richiesta_permesso/search_personal">Gestione Richieste</a>
 				      	  </div>
 			    	</div>
 				    

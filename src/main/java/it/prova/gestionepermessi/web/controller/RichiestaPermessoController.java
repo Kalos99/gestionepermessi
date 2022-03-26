@@ -17,8 +17,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import it.prova.gestionepermessi.dto.DipendenteDTO;
 import it.prova.gestionepermessi.dto.RichiestaPermessoDTO;
 import it.prova.gestionepermessi.model.RichiestaPermesso;
+import it.prova.gestionepermessi.model.Utente;
 import it.prova.gestionepermessi.service.DipendenteService;
 import it.prova.gestionepermessi.service.RichiestaPermessoService;
+import it.prova.gestionepermessi.service.UtenteService;
 
 @Controller
 @RequestMapping(value = "/richiesta_permesso")
@@ -29,6 +31,9 @@ public class RichiestaPermessoController {
 	
 	@Autowired
 	private DipendenteService dipendenteService;
+	
+	@Autowired
+	private UtenteService utenteService;
 	
 	@GetMapping
 	public ModelAndView listAllRichieste() {
@@ -75,5 +80,24 @@ public class RichiestaPermessoController {
 		
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/richiesta_permesso";
+	}
+	
+	@GetMapping("/search_personal")
+	public String searchRichiestePersonali() {
+		return "richiesta_permesso/search_personal";
+	}
+	
+	@PostMapping("/list_personal")
+	public String listRichiestePersonali(RichiestaPermessoDTO richiestaExample,@RequestParam(name = "usernameUtente", required = true) String username, @RequestParam(defaultValue = "0") Integer pageNo,
+			@RequestParam(defaultValue = "10") Integer pageSize, @RequestParam(defaultValue = "id") String sortBy,
+			ModelMap model) {
+
+		Utente utenteInPagina = utenteService.findByUsername(username);
+		richiestaExample.setDipendente(DipendenteDTO.buildDipendenteDTOFromModel(dipendenteService.caricaSingoloDipendenteConUtente(utenteInPagina.getId())));
+		List<RichiestaPermesso> richieste = richiestaPermessoService.findByExample(richiestaExample.buildRichiestaPermessoModel(false, true), pageNo,
+				pageSize, sortBy).getContent();
+
+		model.addAttribute("richiesta_list_attribute", RichiestaPermessoDTO.createRichiestaPermessoDTOListFromModelList(richieste));
+		return "richiesta_permesso/list";
 	}
 }

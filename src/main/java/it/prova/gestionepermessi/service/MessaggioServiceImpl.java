@@ -90,4 +90,8 @@ public class MessaggioServiceImpl implements MessaggioService {
 		repository.save(messaggioReloaded);
 	}
 
+	@Override
+	public Integer numeroMessaggiNonLetti() {
+		return repository.countByLetto(false);
+	}
 }

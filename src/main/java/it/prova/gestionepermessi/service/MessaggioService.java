@@ -23,4 +23,7 @@ public interface MessaggioService {
 	public Page<Messaggio> findByExample(Messaggio example, Integer pageNo, Integer pageSize, String sortBy);
 	
 	public void leggiMessaggio(Long idMessaggio);
+	
+	public Integer numeroMessaggiNonLetti();
 }
+

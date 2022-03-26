@@ -28,10 +28,22 @@
 			    <div class='card-header'>
 			        <h5>Lista dei risultati</h5> 
 			    </div>
+			    
+			    
 			    <div class='card-body'>
+			    
+			    	<sec:authorize access="hasRole('BO_USER')">
 			    	<a href="${pageContext.request.contextPath}/richiesta_permesso/search" class='btn btn-outline-secondary' >
 				            <i class='fa fa-chevron-left'></i> Torna alla Ricerca
 				        </a>
+				    </sec:authorize>
+				    
+			    	<sec:authorize access="hasRole('DIPENDENTE_USER')">
+			    	<a class="btn btn-primary " href="${pageContext.request.contextPath}/richiesta_permesso/insert">Add New</a>
+			    	<a href="${pageContext.request.contextPath}/richiesta_permesso/search_personal" class='btn btn-outline-secondary' >
+				            <i class='fa fa-chevron-left'></i> Torna alla Ricerca
+				        </a>
+				    </sec:authorize>
 			    
 			        <div class='table-responsive'>
 			            <table class='table table-striped ' >

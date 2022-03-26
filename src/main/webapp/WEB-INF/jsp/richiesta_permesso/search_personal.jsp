@@ -31,7 +31,8 @@
 					    </div>
 					    <div class='card-body'>
 			
-								<form method="post" action="list" class="row g-3">
+								<form method="post" action="list_personal/${principal.username }" class="row g-3">
+									<input type="hidden" name="usernameUtente" value= <sec:authentication property = "principal.username"/> >	
 								
 									<div class="col-md-12">
 										<label for="tipoPermesso" class="form-label">Tipo permesso </label>
@@ -58,19 +59,6 @@
 		                        		<input class="form-control" id="dataFine" type="date" placeholder="dd/MM/yy"
 		                            		title="formato : gg/mm/aaaa"  name="dataFine" >
 									</div>
-								
-<!-- 									<div class="col-md-6"> -->
-<!-- 										<label for="descrizione" class="form-label">Descrizione</label> -->
-<!-- 										<input type="text" name="descrizione" id="descrizione" class="form-control" placeholder="Inserire la descrizione"> -->
-<!-- 									</div> -->
-
-									<div class="col-md-12">
-										<label for="dipendenteSearchInput" class="form-label">Dipendente:</label>
-											<input class="form-control ${status.error ? 'is-invalid' : ''}" type="text" id="dipendenteSearchInput"
-												name="dipendenteInput" value="${insert_richiesta_attr.dipendente.nome}${empty insert_richiesta_attr.dipendente.nome?'':' '}${insert_richiesta_attr.dipendente.cognome}">
-										<input type="hidden" name="dipendente.id" id="dipendenteId" value="${insert_richiesta_attr.dipendente.id}">
-									</div>
-
 									
 									<div class="row-md-6">
 										<p>Stato:</p>
@@ -104,42 +92,6 @@
 										
 									
 								</form>
-								
-								<%-- FUNZIONE JQUERY UI PER AUTOCOMPLETE --%>
-								<script>
-									$("#dipendenteSearchInput").autocomplete({
-										 source: function(request, response) {
-										        $.ajax({
-										            url: "../dipendente/searchDipendentiAjax",
-										            datatype: "json",
-										            data: {
-										                term: request.term,   
-										            },
-										            success: function(data) {
-										                response($.map(data, function(item) {
-										                    return {
-											                    label: item.label,
-											                    value: item.value
-										                    }
-										                }))
-										            }
-										        })
-										    },
-										//quando seleziono la voce nel campo deve valorizzarsi la descrizione
-									    focus: function(event, ui) {
-									        $("#dipendenteSearchInput").val(ui.item.label)
-									        return false
-									    },
-									    minLength: 2,
-									    //quando seleziono la voce nel campo hidden deve valorizzarsi l'id
-									    select: function( event, ui ) {
-									    	$('#dipendenteId').val(ui.item.value);
-									    	//console.log($('#contribuenteId').val())
-									        return false;
-									    }
-									});
-								</script>
-								<!-- end script autocomplete -->
 
 <%-- 								FUNZIONE JQUERY UI PER SHOW/HIDE CAMPI AGGIUNTIVI --%>
 

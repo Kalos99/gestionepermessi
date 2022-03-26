@@ -31,12 +31,12 @@
 		          <a class="dropdown-item" href="${pageContext.request.contextPath}/messaggio/search">Gestione messaggi</a>
 		        </div>
 		      </li>
-		      <a class="btn btn-primary" href="${pageContext.request.contextPath}/messaggio">Messaggi non letti <span class="badge badge-warning">${unread_messages }</span></a>
+		      <a class="nav-link active" aria-current="page" href="${pageContext.request.contextPath}/messaggio">Messaggi non letti <span class="badge badge-light">${unread_messages }</span></a>
 		   </sec:authorize>
 		   
 		   <sec:authorize access="hasRole('DIPENDENTE_USER')">
 	          <li class="nav-item">
-	            <a class="nav-link" href="${pageContext.request.contextPath}/richiesta_permesso/search">Gestione Richieste Permesso</a>
+	            <a class="nav-link" href="${pageContext.request.contextPath}/richiesta_permesso/search_personal">Gestione Richieste Permesso</a>
 	          </li>
 		   </sec:authorize>
         </ul>

@@ -149,4 +149,9 @@ public class DipendenteServiceImpl implements DipendenteService{
 	public List<Dipendente> cercaByCognomeENomeILike(String term) {
 		return repository.findByCognomeIgnoreCaseContainingOrNomeIgnoreCaseContainingOrderByNomeAsc(term, term);
 	}
+
+	@Override
+	public Dipendente caricaSingoloDipendenteConUtente(Long id) {
+		return repository.findByIdConUtente(id).orElse(null);
+	}
 }
