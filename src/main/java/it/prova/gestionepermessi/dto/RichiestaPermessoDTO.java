@@ -165,6 +165,10 @@ public class RichiestaPermessoDTO {
 		this.dipendente = dipendente;
 	}
 	
+	public boolean isApprovato() {
+		return this.approvato;
+	}
+	
 	public RichiestaPermesso buildRichiestaPermessoModel(boolean includesAttachment, boolean includesDipendente) {
 		RichiestaPermesso result = new RichiestaPermesso(this.id, this.tipoPermesso, this.dataInizio, this.dataFine, this.approvato, this.codiceCertificato, this.note);
 		

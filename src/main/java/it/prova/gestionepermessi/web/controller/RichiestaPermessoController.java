@@ -23,7 +23,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import it.prova.gestionepermessi.dto.DipendenteDTO;
 import it.prova.gestionepermessi.dto.RichiestaPermessoDTO;
-
+import it.prova.gestionepermessi.exceptions.DataInizioPassataException;
+import it.prova.gestionepermessi.exceptions.ElementNotFoundException;
+import it.prova.gestionepermessi.exceptions.RichiestaApprovataException;
 import it.prova.gestionepermessi.model.RichiestaPermesso;
 import it.prova.gestionepermessi.model.Utente;
 import it.prova.gestionepermessi.service.DipendenteService;
@@ -49,7 +51,6 @@ public class RichiestaPermessoController {
 	
 	@GetMapping
 	public ModelAndView listAllRichiestePermesso(Model model) {
-		System.out.println("SEI NEL PATH BASE");
 		ModelAndView mv = new ModelAndView();
 		Set<String> roles = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
 				.map(r -> r.getAuthority()).collect(Collectors.toSet());
@@ -156,5 +157,29 @@ public class RichiestaPermessoController {
 		if(roles.contains("ROLE_BO_USER")) {
 			modelInput.addAttribute("unread_messages", messaggioService.numeroMessaggiNonLetti());
 		}
+	}
+	
+	@GetMapping("/delete/{idRichiesta}")
+	public String delete(@PathVariable(required = true) Long idRichiesta, Model model) {
+		model.addAttribute("delete_richiesta_attr", RichiestaPermessoDTO.buildRichiestaPermessoDTOFromModel(richiestaPermessoService.caricaSingolaRichiestaEager(idRichiesta)));
+		return "richiesta_permesso/delete";
+	}
+	
+	@PostMapping("/remove")
+	public String remove(@RequestParam(required = true) Long idRichiesta, RedirectAttributes redirectAttrs) {
+	    try {
+	        richiestaPermessoService.rimuovi(idRichiesta);
+	      } catch (ElementNotFoundException e) {
+	        redirectAttrs.addFlashAttribute("errorMessage", "Contribuente non trovato.");
+	        return "redirect:/richiesta_permesso";
+	      } catch (RichiestaApprovataException e) {
+		    redirectAttrs.addFlashAttribute("errorMessage", "Impossibile rimuovere: la richiesta è già stata approvata");
+		    return "redirect:/richiesta_permesso";
+		  }catch (DataInizioPassataException e) {
+			    redirectAttrs.addFlashAttribute("errorMessage", "Impossibile rimuovere: la data inizio della richiesta è già passata");
+			    return "redirect:/richiesta_permesso";
+			  }
+		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
+		return "redirect:/richiesta_permesso";
 	}
 }

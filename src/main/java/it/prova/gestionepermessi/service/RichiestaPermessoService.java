@@ -20,7 +20,7 @@ public interface RichiestaPermessoService {
 	
 	 public void inserisciNuovaECreaMessaggio(RichiestaPermesso richiestaInstance);
 
-	public void rimuovi(RichiestaPermesso richiestaInstance);
+	public void rimuovi(Long id);
 
 	public Page<RichiestaPermesso> findByExample(RichiestaPermesso example, Integer pageNo, Integer pageSize, String sortBy);
 	

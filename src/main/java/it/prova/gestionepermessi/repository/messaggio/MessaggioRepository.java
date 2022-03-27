@@ -13,5 +13,8 @@ public interface MessaggioRepository extends PagingAndSortingRepository<Messaggi
 	
 	@Query("select count(*) from Messaggio m where m.letto = ?1")
 	Integer countByLetto(boolean letto);
+	
+	@Query("from Messaggio m join fetch m.richiesta r where r.id = ?1")
+	Messaggio findByIdRichiesta(Long id);
 
 }

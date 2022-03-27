@@ -16,6 +16,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import it.prova.gestionepermessi.exceptions.DataInizioPassataException;
+import it.prova.gestionepermessi.exceptions.ElementNotFoundException;
+import it.prova.gestionepermessi.exceptions.RichiestaApprovataException;
 import it.prova.gestionepermessi.model.Messaggio;
 import it.prova.gestionepermessi.model.RichiestaPermesso;
 import it.prova.gestionepermessi.repository.messaggio.MessaggioRepository;
@@ -54,9 +57,20 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 	}
 
 	@Override
-	public void rimuovi(RichiestaPermesso richiestaInstance) {
-		repository.delete(richiestaInstance);
-		
+	public void rimuovi(Long id) {
+		if(id == null) {
+			throw new IllegalArgumentException("Id non trovato");
+		}
+		RichiestaPermesso richiestaDaEliminare = repository.findById(id).get();
+		if (richiestaDaEliminare == null)
+			throw new ElementNotFoundException("Richiesta con id: " + id + " non trovato.");
+		if (richiestaDaEliminare.isApprovato())
+			throw new RichiestaApprovataException("Impossibile rimuovere: la richiesta è già stata approvata");
+		if(richiestaDaEliminare.getDataInizio().before(new Date()))
+			throw new DataInizioPassataException("Impossibile rimuovere: la data inizio della richiesta è già passata");
+		Messaggio messaggioDaEliminare = messaggioRepository.findByIdRichiesta(id);
+		messaggioRepository.deleteById(messaggioDaEliminare.getId());
+		repository.deleteById(id);		
 	}
 
 	@Override
