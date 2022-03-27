@@ -27,5 +27,7 @@ public interface RichiestaPermessoService {
 	public void changeState(Long richiestaInstanceId);
 	
 	public List<RichiestaPermesso> listAllElementsByUsername(String usernameInput);
+	
+	public void aggiornaRichiestaECreaNuovoMessaggio(RichiestaPermesso richiestaInstance);
 
 }

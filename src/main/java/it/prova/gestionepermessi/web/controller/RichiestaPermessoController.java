@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -170,7 +171,7 @@ public class RichiestaPermessoController {
 	    try {
 	        richiestaPermessoService.rimuovi(idRichiesta);
 	      } catch (ElementNotFoundException e) {
-	        redirectAttrs.addFlashAttribute("errorMessage", "Contribuente non trovato.");
+	        redirectAttrs.addFlashAttribute("errorMessage", "Richiesta non trovata.");
 	        return "redirect:/richiesta_permesso";
 	      } catch (RichiestaApprovataException e) {
 		    redirectAttrs.addFlashAttribute("errorMessage", "Impossibile rimuovere: la richiesta è già stata approvata");
@@ -179,6 +180,36 @@ public class RichiestaPermessoController {
 			    redirectAttrs.addFlashAttribute("errorMessage", "Impossibile rimuovere: la data inizio della richiesta è già passata");
 			    return "redirect:/richiesta_permesso";
 			  }
+		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
+		return "redirect:/richiesta_permesso";
+	}
+	
+	@GetMapping("/edit/{idRichiesta}")
+	public String edit(@PathVariable(required = true) Long idRichiesta, Model model) {
+		RichiestaPermesso richiestaModel = richiestaPermessoService.caricaSingolaRichiesta(idRichiesta);
+		model.addAttribute("edit_richiesta_attr", RichiestaPermessoDTO.buildRichiestaPermessoDTOFromModel(richiestaModel));
+		return "richiesta_permesso/edit";
+	}
+	
+	@PostMapping("/update")
+	public String update(@Valid @ModelAttribute("edit_richiesta_attr") RichiestaPermessoDTO richiestaDTO, BindingResult result, @RequestParam(name = "usernameUtente", required = true) String username, Model model, RedirectAttributes redirectAttrs, HttpServletRequest request) {
+		
+		Utente utenteInPagina = utenteService.findByUsername(username);
+		richiestaDTO.setDipendente(DipendenteDTO.buildDipendenteDTOFromModel(dipendenteService.caricaSingoloDipendenteConUtente(utenteInPagina.getId())));
+
+		if (result.hasErrors()) {
+			return "richiesta_permesso/edit";
+		}
+		try {
+	        richiestaPermessoService.aggiornaRichiestaECreaNuovoMessaggio(richiestaDTO.buildRichiestaPermessoModel(false, true));
+	      } catch (ElementNotFoundException e) {
+	        redirectAttrs.addFlashAttribute("errorMessage", "Richiesta non trovata.");
+	        return "redirect:/richiesta_permesso";
+		  }catch (DataInizioPassataException e) {
+			    redirectAttrs.addFlashAttribute("errorMessage", "Impossibile rimuovere: la data inizio della richiesta è già passata");
+			    return "redirect:/richiesta_permesso";
+			  }
+
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
 		return "redirect:/richiesta_permesso";
 	}

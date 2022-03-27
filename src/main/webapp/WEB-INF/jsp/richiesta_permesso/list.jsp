@@ -62,11 +62,14 @@
 										<td>
 											<a class="btn btn-sm btn-outline-secondary" href="${pageContext.request.contextPath}/richiesta_permesso/show/${richiestaItem.id }">Visualizza</a>
 											<sec:authorize access="hasRole('DIPENDENTE_USER')">
-												<a class="btn  btn-sm btn-outline-primary ml-2 mr-2" href="${pageContext.request.contextPath}/richiesta_permesso/edit/${richiestaItem.id }">Edit</a>
+												<jsp:useBean id="now" class="java.util.Date"/>
+												<c:if test ="${richiestaItem.dataInizio.after(now) }" >
+													<a class="btn  btn-sm btn-outline-primary ml-2 mr-2" href="${pageContext.request.contextPath}/richiesta_permesso/edit/${richiestaItem.id }">Edit</a>
+												</c:if>
+												<c:if test="${richiestaItem.isApprovato() == false }">
+													<a class="btn  btn-sm btn-outline-danger ml-2 mr-2" href="${pageContext.request.contextPath}/richiesta_permesso/delete/${richiestaItem.id }">Delete</a>
+												</c:if>
 											</sec:authorize>
-											<c:if test="${richiestaItem.isApprovato() == false }">
-												<a class="btn  btn-sm btn-outline-danger ml-2 mr-2" href="${pageContext.request.contextPath}/richiesta_permesso/delete/${richiestaItem.id }">Delete</a>
-											</c:if>
 										</td>
 									</tr>
 								</c:forEach>

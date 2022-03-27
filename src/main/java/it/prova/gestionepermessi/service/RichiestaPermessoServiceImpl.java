@@ -150,4 +150,30 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 	public List<RichiestaPermesso> listAllElementsByUsername(String usernameInput) {
 	  return (List<RichiestaPermesso>) repository.findByUsername(usernameInput);
 	 }
+
+	@Override
+	public void aggiornaRichiestaECreaNuovoMessaggio(RichiestaPermesso richiestaInstance) {
+		RichiestaPermesso richiestaDaAggiornare = repository.findById(richiestaInstance.getId()).get();
+		if (richiestaDaAggiornare == null)
+			throw new ElementNotFoundException("Richiesta con id: " + richiestaInstance.getId() + " non trovato.");
+		if(richiestaDaAggiornare.getDataInizio().before(new Date()))
+			throw new DataInizioPassataException("Impossibile rimuovere: la data inizio della richiesta è già passata");
+		Messaggio messaggioDaEliminare = messaggioRepository.findByIdRichiesta(richiestaDaAggiornare.getId());
+		messaggioRepository.deleteById(messaggioDaEliminare.getId());
+		
+		richiestaDaAggiornare.setTipoPermesso(richiestaInstance.getTipoPermesso());
+		richiestaDaAggiornare.setDataInizio(richiestaInstance.getDataInizio());
+		richiestaDaAggiornare.setDataFine(richiestaInstance.getDataFine());
+		richiestaDaAggiornare.setNote(richiestaInstance.getNote());
+		richiestaDaAggiornare.setApprovato(false);
+		Messaggio nuovoMessaggio = new Messaggio();
+		nuovoMessaggio.setLetto(false);
+		nuovoMessaggio.setOggetto("Richiesta permesso da parte di " + richiestaDaAggiornare.getDipendente().getNome() + " " + richiestaDaAggiornare.getDipendente().getCognome());
+		nuovoMessaggio.setTesto("Il dipendente " + richiestaDaAggiornare.getDipendente().getNome() + " " + richiestaDaAggiornare.getDipendente().getCognome() + " ha richiesto un permesso per " + richiestaDaAggiornare.getTipoPermesso() + " dal " + richiestaDaAggiornare.getDataInizio() + " al " + richiestaDaAggiornare.getDataFine());
+        nuovoMessaggio.setRichiesta(richiestaDaAggiornare);
+        
+		repository.save(richiestaDaAggiornare);
+		messaggioRepository.save(nuovoMessaggio);
+		
+	}
 }
