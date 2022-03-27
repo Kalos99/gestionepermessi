@@ -30,7 +30,7 @@ public class RichiestaPermessoDTO {
 	
 	private AttachmentDTO attachment;
 	
-	@NotNull(message = "{dipendente.notnull}")
+//	@NotNull(message = "{dipendente.notnull}")
 	private DipendenteDTO dipendente;
 
 	public RichiestaPermessoDTO() {

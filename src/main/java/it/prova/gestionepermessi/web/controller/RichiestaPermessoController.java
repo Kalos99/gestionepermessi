@@ -1,10 +1,13 @@
 package it.prova.gestionepermessi.web.controller;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -24,6 +27,7 @@ import it.prova.gestionepermessi.dto.RichiestaPermessoDTO;
 import it.prova.gestionepermessi.model.RichiestaPermesso;
 import it.prova.gestionepermessi.model.Utente;
 import it.prova.gestionepermessi.service.DipendenteService;
+import it.prova.gestionepermessi.service.MessaggioService;
 import it.prova.gestionepermessi.service.RichiestaPermessoService;
 import it.prova.gestionepermessi.service.UtenteService;
 
@@ -40,12 +44,34 @@ public class RichiestaPermessoController {
 	@Autowired
 	private UtenteService utenteService;
 	
+	@Autowired
+	private MessaggioService messaggioService;
+	
 	@GetMapping
-	public ModelAndView listAllRichieste() {
+	public ModelAndView listAllRichiestePermesso(Model model) {
+		System.out.println("SEI NEL PATH BASE");
 		ModelAndView mv = new ModelAndView();
-		List<RichiestaPermesso> richieste = richiestaPermessoService.listAllRichieste();
-		mv.addObject("richiesta_list_attribute", RichiestaPermessoDTO.createRichiestaPermessoDTOListFromModelList(richieste));
-		mv.setViewName("richiesta_permesso/list");
+		Set<String> roles = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream()
+				.map(r -> r.getAuthority()).collect(Collectors.toSet());
+		if (roles.contains("ROLE_BO_USER")) {
+			List<RichiestaPermesso> richiestePermesso = richiestaPermessoService.listAllRichieste();
+			mv.addObject("richiesta_list_attribute",
+					RichiestaPermessoDTO.createRichiestaPermessoDTOListFromModelList(richiestePermesso));
+			mv.addObject("path", "ricercaPermessi");
+			checkMessageIfBO(model);
+			mv.setViewName("richiesta_permesso/list");
+		} else if (roles.contains("ROLE_DIPENDENTE_USER")) {
+			List<RichiestaPermesso> richiestePermesso = richiestaPermessoService
+					.listAllElementsByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+			mv.addObject("richiesta_list_attribute",
+					RichiestaPermessoDTO.createRichiestaPermessoDTOListFromModelList(richiestePermesso));
+			mv.addObject("path", "gestioneRichiestePermesso");
+			mv.setViewName("richiesta_permesso/list");
+		} else {
+			mv.addObject("path", "home");
+			mv.setViewName("home");
+		}
+
 		return mv;
 	}
 	
@@ -60,6 +86,7 @@ public class RichiestaPermessoController {
 			@RequestParam(defaultValue = "10") Integer pageSize, @RequestParam(defaultValue = "id") String sortBy,
 			ModelMap model) {
 
+		System.out.println("Sono dentro");
 		List<RichiestaPermesso> richieste = richiestaPermessoService.findByExample(richiestaExample.buildRichiestaPermessoModel(false, true), pageNo,
 				pageSize, sortBy).getContent();
 
@@ -88,7 +115,7 @@ public class RichiestaPermessoController {
 		richiestaPermessoService.inserisciNuovaECreaMessaggio(richiestaDTO.buildRichiestaPermessoModel(false, true));
 
 		redirectAttrs.addFlashAttribute("successMessage", "Operazione eseguita correttamente");
-		return "redirect:/richiesta_permesso/list";
+		return "redirect:/richiesta_permesso";
 	}
 	
 	@GetMapping("/show/{idRichiesta}")
@@ -122,5 +149,12 @@ public class RichiestaPermessoController {
 
 		model.addAttribute("richiesta_list_attribute", RichiestaPermessoDTO.createRichiestaPermessoDTOListFromModelList(richieste));
 		return "richiesta_permesso/list";
+	}
+	
+	private void checkMessageIfBO(Model modelInput) {
+		Set<String> roles = SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().map(r -> r.getAuthority()).collect(Collectors.toSet());
+		if(roles.contains("ROLE_BO_USER")) {
+			modelInput.addAttribute("unread_messages", messaggioService.numeroMessaggiNonLetti());
+		}
 	}
 }

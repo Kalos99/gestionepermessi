@@ -130,4 +130,10 @@ public class RichiestaPermessoServiceImpl implements RichiestaPermessoService {
 		repository.save(richiestaInstance);
 		messaggioRepository.save(nuovoMessaggio);
 	}
+	
+	@Override
+	@Transactional(readOnly = true)
+	public List<RichiestaPermesso> listAllElementsByUsername(String usernameInput) {
+	  return (List<RichiestaPermesso>) repository.findByUsername(usernameInput);
+	 }
 }

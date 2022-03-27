@@ -25,5 +25,7 @@ public interface RichiestaPermessoService {
 	public Page<RichiestaPermesso> findByExample(RichiestaPermesso example, Integer pageNo, Integer pageSize, String sortBy);
 	
 	public void changeState(Long richiestaInstanceId);
+	
+	public List<RichiestaPermesso> listAllElementsByUsername(String usernameInput);
 
 }
