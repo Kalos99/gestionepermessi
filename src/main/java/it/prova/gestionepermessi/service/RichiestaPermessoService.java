@@ -18,7 +18,7 @@ public interface RichiestaPermessoService {
 
 	public void inserisciNuovo(RichiestaPermesso richiestaInstance);
 	
-	 public void inserisciNuovaECreaMessaggio(RichiestaPermesso richiestaInstance);
+	public void inserisciNuovaECreaMessaggio(RichiestaPermesso richiestaInstance);
 
 	public void rimuovi(Long id);
 

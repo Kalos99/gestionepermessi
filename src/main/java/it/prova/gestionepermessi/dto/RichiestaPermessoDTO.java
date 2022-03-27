@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 
+import it.prova.gestionepermessi.model.Attachment;
 import it.prova.gestionepermessi.model.RichiestaPermesso;
 import it.prova.gestionepermessi.model.TipoPermesso;
 
@@ -28,7 +29,7 @@ public class RichiestaPermessoDTO {
 
 	private String note;
 	
-	private AttachmentDTO attachment;
+	private Attachment attachment;
 	
 //	@NotNull(message = "{dipendente.notnull}")
 	private DipendenteDTO dipendente;
@@ -40,7 +41,7 @@ public class RichiestaPermessoDTO {
 		this.id = id;
 	}
 
-	public RichiestaPermessoDTO(Long id, TipoPermesso tipoPermesso, Date dataInizio, Date dataFine, Boolean approvato, String codiceCertificato, String note, AttachmentDTO attachment, DipendenteDTO dipendente) {
+	public RichiestaPermessoDTO(Long id, TipoPermesso tipoPermesso, Date dataInizio, Date dataFine, Boolean approvato, String codiceCertificato, String note, Attachment attachment, DipendenteDTO dipendente) {
 		this.id = id;
 		this.tipoPermesso = tipoPermesso;
 		this.dataInizio = dataInizio;
@@ -52,7 +53,7 @@ public class RichiestaPermessoDTO {
 		this.dipendente = dipendente;
 	}
 
-	public RichiestaPermessoDTO(TipoPermesso tipoPermesso, Date dataInizio, Date dataFine, Boolean approvato, String codiceCertificato, String note, AttachmentDTO attachment, DipendenteDTO dipendente) {
+	public RichiestaPermessoDTO(TipoPermesso tipoPermesso, Date dataInizio, Date dataFine, Boolean approvato, String codiceCertificato, String note, Attachment attachment, DipendenteDTO dipendente) {
 		this.tipoPermesso = tipoPermesso;
 		this.dataInizio = dataInizio;
 		this.dataFine = dataFine;
@@ -63,7 +64,7 @@ public class RichiestaPermessoDTO {
 		this.dipendente = dipendente;
 	}
 
-	public RichiestaPermessoDTO(Long id, TipoPermesso tipoPermesso, Date dataInizio, Date dataFine, Boolean approvato, String codiceCertificato, String note, AttachmentDTO attachment) {
+	public RichiestaPermessoDTO(Long id, TipoPermesso tipoPermesso, Date dataInizio, Date dataFine, Boolean approvato, String codiceCertificato, String note, Attachment attachment) {
 		this.id = id;
 		this.tipoPermesso = tipoPermesso;
 		this.dataInizio = dataInizio;
@@ -149,11 +150,11 @@ public class RichiestaPermessoDTO {
 		this.note = note;
 	}
 
-	public AttachmentDTO getAttachment() {
+	public Attachment getAttachment() {
 		return attachment;
 	}
 
-	public void setAttachment(AttachmentDTO attachment) {
+	public void setAttachment(Attachment attachment) {
 		this.attachment = attachment;
 	}
 
@@ -169,11 +170,8 @@ public class RichiestaPermessoDTO {
 		return this.approvato;
 	}
 	
-	public RichiestaPermesso buildRichiestaPermessoModel(boolean includesAttachment, boolean includesDipendente) {
-		RichiestaPermesso result = new RichiestaPermesso(this.id, this.tipoPermesso, this.dataInizio, this.dataFine, this.approvato, this.codiceCertificato, this.note);
-		
-		if (includesAttachment && attachment.getId() != null)
-			result.setAttachment(attachment.buildAttachmentModel());
+	public RichiestaPermesso buildRichiestaPermessoModel(boolean includesDipendente) {
+		RichiestaPermesso result = new RichiestaPermesso(this.id, this.tipoPermesso, this.dataInizio, this.dataFine, this.approvato, this.codiceCertificato, this.note, this.attachment);
 		
 		if (includesDipendente && dipendente.getId() != null)
 			result.setDipendente(dipendente.buildDipendenteModel(true));

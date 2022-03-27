@@ -84,6 +84,18 @@ public class RichiestaPermesso {
 		this.codiceCertificato = codiceCertificato;
 		this.note = note;
 	}
+	
+	public RichiestaPermesso(Long id, TipoPermesso tipoPermesso, Date dataInizio, Date dataFine, Boolean approvato,
+			String codiceCertificato, String note, Attachment attachment) {
+		this.id = id;
+		this.tipoPermesso = tipoPermesso;
+		this.dataInizio = dataInizio;
+		this.dataFine = dataFine;
+		this.approvato = approvato;
+		this.codiceCertificato = codiceCertificato;
+		this.note = note;
+		this.attachment = attachment;
+	}
 
 
 

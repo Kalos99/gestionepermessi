@@ -87,7 +87,7 @@ public class MessaggioDTO {
 		Messaggio result = new Messaggio(this.id, this.testo, this.oggetto, this.letto);
 		
 		if (includesRichiesta && richiesta.getId() != null)
-			result.setRichiesta(richiesta.buildRichiestaPermessoModel(true, true));
+			result.setRichiesta(richiesta.buildRichiestaPermessoModel(true));
 		
 		return result;
 	}

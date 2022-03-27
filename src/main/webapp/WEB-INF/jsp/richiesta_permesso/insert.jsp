@@ -2,7 +2,6 @@
 <%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
-<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!doctype html>
 <html lang="it" class="h-100">
 	<head>
@@ -48,8 +47,7 @@
 					    
 					   		 <h6 class="card-title">I campi con <span class="text-danger">*</span> sono obbligatori</h6>
 			
-								<form:form method="post" modelAttribute="insert_richiesta_attr" action="save" novalidate="novalidate" class="row g-3">
-									<input type="hidden" name="usernameUtente" value= <sec:authentication property = "principal.username"/> >
+								<form:form enctype="multipart/form-data" method="post" modelAttribute="insert_richiesta_attr" action="save" novalidate="novalidate" class="row g-3">
 								
 									<div class="col-md-12">
 										<label for="tipoPermesso" class="form-label">Tipo permesso <span class="text-danger">*</span></label>
@@ -63,7 +61,7 @@
 										<form:errors  path="tipoPermesso" cssClass="error_field" />
 									</div>
 									
-									<div class="col-md-12 d-none" id="certificato">
+									<div class="col-md-6 d-none" id="certificato">
 										<label for="codiceCertificato" class="form-label">Codice certificato <span class="text-danger">*</span></label>
 										<spring:bind path="codiceCertificato">
 											<input type="text" name="codiceCertificato" id="codiceCertificato" class="form-control ${status.error ? 'is-invalid' : ''}" placeholder="Inserire il codice" value="${insert_richiesta_attr.codiceCertificato }" required>
@@ -71,13 +69,22 @@
 										<form:errors  path="codiceCertificato" cssClass="error_field" />
 									</div>
 									
-<!-- 									<div class="col-md-6 d-none" id="allegato"> -->
-<!-- 										<label for="attachment" class="form-label">Allegato <span class="text-danger">*</span></label> -->
-<%-- 										<spring:bind path="attachment"> --%>
-<%-- 											<input type="file" name="attachment" id="attachment" class="form-control ${status.error ? 'is-invalid' : ''}" placeholder="caricare il file"  required> --%>
-<%-- 										</spring:bind> --%>
-<%-- 										<form:errors  path="codiceCertificato" cssClass="error_field" /> --%>
-<!-- 									</div>						 -->
+									<div class="col-md-6 d-none" id="attachment">
+										<label for="attachment" class="form-label">Allegato <span class="text-danger">*</span></label>
+										<spring:bind path="attachment">
+											<input type="file" name="file" id="attachment" class="form-control ${status.error ? 'is-invalid' : ''}"  required>
+										</spring:bind>
+										<form:errors  path="codiceCertificato" cssClass="error_field" />
+									</div>
+									
+									<div class="col-md-12">
+										<div class="form-check">
+											<input class="form-check-input" name="giornoSingolo" type="checkbox" id="giornoSingolo" >
+											<label class="form-check-label" for="giornoSingolo" >
+												Giorno singolo
+											</label>
+										</div>
+									</div>						
 									
 									<fmt:formatDate pattern='yyyy-MM-dd' var="parsedDate" type='date' value='${insert_richiesta_attr.dataInizio}' />
 									<div class="col-md-6">
@@ -125,11 +132,11 @@
 											if($('#tipoPermesso :selected').text()=== 'MALATTIA'){
 												//console.log("MALATTIA");
 												$("#certificato").removeClass('d-none');
-												$("#allegato").removeClass('d-none');
+												$("#attachment").removeClass('d-none');
 											}else{
 												//console.log("FERIE");
 												$("#certificato").addClass('d-none');
-												$("#allegato").addClass('d-none');
+												$("#attachment").addClass('d-none');
 											}
 										});
 

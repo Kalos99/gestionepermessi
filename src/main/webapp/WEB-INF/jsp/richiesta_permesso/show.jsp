@@ -6,7 +6,7 @@
 <head>
 	<!-- Common imports in pages -->
 	<jsp:include page="../header.jsp" />
-	<title>Visualizza elemento</title>
+	<title>Visualizza dettaglio </title>
 	
 </head>
 <body class="d-flex flex-column h-100">
@@ -19,7 +19,7 @@
 			
 			<div class='card'>
 			    <div class='card-header'>
-			        Visualizza dettaglio
+			        Visualizza dettaglio richiesta
 			    </div>
 			
 			    <div class='card-body'>
@@ -41,8 +41,8 @@
 					</dl>
 					
 					<dl class="row">
-						<dt class="col-sm-3 text-right">Stato approvazione richiesta:</dt>
-						<dd class="col-sm-9">${show_richiesta_attr.approvato }</dd>
+						<dt class="col-sm-3 text-right">Stato:</dt>
+						<dd class="col-sm-9">${show_richiesta_attr.approvato?'APPROVATA':'NON APPROVATA'}</dd>
 					</dl>
 					
 			    	<dl class="row">
@@ -51,34 +51,16 @@
 			    	</dl>
 			    	
 			    	<dl class="row">
+						<dt class="col-sm-3 text-right">Attachment:</dt>
+						<dd class="col-sm-9"><a href="${pageContext.request.contextPath}/richiesta_permesso/showAttachment/${show_richiesta_attr.attachment.id}">${show_richiesta_attr.attachment.nomeFile}</a></dd>
+			    	</dl>
+			    	
+			    	<dl class="row">
 					  <dt class="col-sm-3 text-right">Note: </dt>
 					  <dd class="col-sm-9">${show_richiesta_attr.note }</dd>
 			    	</dl>
 			    	
-<!-- 					info Regista -->
-<!-- 			    	<p> -->
-<!-- 					  <a class="btn btn-primary btn-sm" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample"> -->
-<!-- 					    Info Contribuente -->
-<!-- 					  </a> -->
-<!-- 					</p> -->
-<!-- 					<div class="collapse" id="collapseExample"> -->
-<!-- 					  <div class="card card-body"> -->
-<!-- 					  	<dl class="row"> -->
-<!-- 						  <dt class="col-sm-3 text-right">Nome:</dt> -->
-<%-- 						  <dd class="col-sm-9">${show_cartella_attr.contribuente.nome}</dd> --%>
-<!-- 					   	</dl> -->
-<!-- 					   	<dl class="row"> -->
-<!-- 						  <dt class="col-sm-3 text-right">Cognome:</dt> -->
-<%-- 						  <dd class="col-sm-9">${show_cartella_attr.contribuente.cognome}</dd> --%>
-<!-- 					   	</dl> -->
-<!-- 					   	<dl class="row"> -->
-<!-- 						  <dt class="col-sm-3 text-right">Codice fiscale:</dt> -->
-<%-- 						  <dd class="col-sm-9">${show_cartella_attr.contribuente.codiceFiscale}</dd> --%>
-<!-- 					   	</dl> -->
-					    
-<!-- 					  </div> -->
-<!-- 					end info Regista -->
-<!-- 					</div> -->
+
 			    	<sec:authorize access="hasRole('BO_USER')">
 				    	<!-- info Dipendente -->
 				    	<p>
